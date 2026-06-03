@@ -4,19 +4,21 @@
 - `fapi-custom.css`
 - `fapi-custom.js`
 
+Unless noted otherwise, customizations in this repository are intended to preserve the visual appearance of the embedded FAPI form when the transferable embed block is copied to another host page.
+
 ## Recommended host-page structure
 
 ```html
-<link rel="stylesheet" href="PUBLIC_URL_TO/fapi-custom.css">
+<link rel="stylesheet" href="https://vlakfest.github.io/fapi-form-edits/fapi-custom.css">
 
 <div id="fapi-form-wrapper">
   <script type="text/javascript" src="https://form.fapi.cz/script.php?id=2bf5428f-0a21-4eeb-be54-bfb85522da14"></script>
 </div>
 
-<script src="PUBLIC_URL_TO/fapi-custom.js" defer></script>
+<script src="https://vlakfest.github.io/fapi-form-edits/fapi-custom.js" defer></script>
 ```
 
-`PUBLIC_URL_TO` must be replaced with the real public URL after deployment.
+For a different FAPI form, replace only the `id` value in the FAPI embed script URL.
 
 ## Test page
 
@@ -28,12 +30,33 @@ This repository includes a simple `index.html` page for testing the embedded FAP
 When deployed through GitHub Pages, the test page is available at:
 
 ```text
-https://USERNAME.github.io/REPOSITORY/
+https://vlakfest.github.io/fapi-form-edits/
 ```
 
 The customization files are available at:
 
 ```text
-https://USERNAME.github.io/REPOSITORY/fapi-custom.css
-https://USERNAME.github.io/REPOSITORY/fapi-custom.js
+https://vlakfest.github.io/fapi-form-edits/fapi-custom.css
+https://vlakfest.github.io/fapi-form-edits/fapi-custom.js
+```
+
+## Local test page
+
+For local development, use `index-local.html`. It loads the current local files directly:
+
+```text
+fapi-custom.css
+fapi-custom.js
+```
+
+Run a local static server from the repository root:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/index-local.html
 ```

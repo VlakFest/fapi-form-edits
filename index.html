@@ -4,7 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FAPI form test</title>
-    <link rel="stylesheet" href="fapi-custom.css">
+
+    <!--
+      PRENOSITELNY BLOK: zkopirovat na cilovou stranku.
+    -->
+    <link rel="stylesheet" href="https://vlakfest.github.io/fapi-form-edits/fapi-custom.css">
+    <!-- /PRENOSITELNY BLOK: cast v <head> -->
+
+    <!-- TESTOVACI STRANKA: styly nize slouzi jen pro ramec teto testovaci page. -->
     <style>
       body {
         margin: 0;
@@ -36,11 +43,15 @@
     <main>
       <h1>FAPI form test</h1>
 
+      <!--
+        PRENOSITELNY BLOK: zkopirovat na cilovou stranku.
+        Pro jiny FAPI formular vymenit jen hodnotu id v URL embed scriptu.
+      -->
       <div id="fapi-form-wrapper">
         <script type="text/javascript" src="https://form.fapi.cz/script.php?id=2bf5428f-0a21-4eeb-be54-bfb85522da14"></script>
       </div>
+      <script src="https://vlakfest.github.io/fapi-form-edits/fapi-custom.js" defer></script>
+      <!-- /PRENOSITELNY BLOK: cast v <body> -->
     </main>
-
-    <script src="fapi-custom.js" defer></script>
   </body>
 </html>

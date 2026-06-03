@@ -19,4 +19,216 @@
   .fapi-input
 */
 
-/* Future styles go here. */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --vf-brown: #42210b;
+  --vf-brown-dark: #1e1a12;
+  --vf-muted: #7a6e5a;
+  --vf-line: #ddd4c0;
+  --vf-panel: #f8f4ee;
+  --vf-panel-strong: #f5edd8;
+  --vf-gold: #c79a4b;
+  --vf-orange: #ff4b00;
+  --vf-white: #ffffff;
+}
+
+#fapi-form-wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+  color: var(--vf-brown-dark);
+  font-family: Montserrat, Arial, sans-serif;
+}
+
+#fapi-form-wrapper *,
+#fapi-form-wrapper *::before,
+#fapi-form-wrapper *::after {
+  box-sizing: border-box;
+}
+
+#fapi-form-wrapper #fapi-form-form,
+#fapi-form-wrapper .fapi-order-form {
+  width: 100%;
+  color: var(--vf-brown-dark);
+  background: var(--vf-white);
+  border: 1px solid var(--vf-line);
+  border-radius: 12px;
+  padding: clamp(18px, 3vw, 32px);
+  box-shadow: 0 12px 36px rgba(66, 33, 11, 0.08);
+}
+
+#fapi-form-wrapper .fapi-form-items,
+#fapi-form-wrapper .fapi-form-basic-data,
+#fapi-form-wrapper .fapi-form-custom-fields,
+#fapi-form-wrapper .fapi-form-shipping-methods,
+#fapi-form-wrapper .fapi-form-payment-methods,
+#fapi-form-wrapper .fapi-form-result,
+#fapi-form-wrapper .fapi-form-result-container {
+  background: var(--vf-panel);
+  border: 1px solid rgba(199, 154, 75, 0.25);
+  border-radius: 8px;
+  margin: 0 0 16px;
+  padding: clamp(16px, 2.4vw, 24px);
+}
+
+#fapi-form-wrapper .fapi-form-basic-block,
+#fapi-form-wrapper .fapi-form-item-group,
+#fapi-form-wrapper .fapi-form-custom-field {
+  border-color: var(--vf-line);
+}
+
+#fapi-form-wrapper h1,
+#fapi-form-wrapper h2,
+#fapi-form-wrapper h3,
+#fapi-form-wrapper legend,
+#fapi-form-wrapper .fapi-form-basic-block-title {
+  color: var(--vf-brown);
+  font-family: Montserrat, Arial, sans-serif;
+  font-weight: 700;
+}
+
+#fapi-form-wrapper label,
+#fapi-form-wrapper .fapi-form-label {
+  color: var(--vf-brown-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+#fapi-form-wrapper .fapi-input,
+#fapi-form-wrapper input[type="text"],
+#fapi-form-wrapper input[type="email"],
+#fapi-form-wrapper input[type="tel"],
+#fapi-form-wrapper input[type="number"],
+#fapi-form-wrapper select,
+#fapi-form-wrapper textarea {
+  width: 100%;
+  min-height: 46px;
+  color: var(--vf-brown-dark);
+  background: var(--vf-white);
+  border: 1px solid var(--vf-line);
+  border-radius: 8px;
+  padding: 11px 13px;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+#fapi-form-wrapper textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+#fapi-form-wrapper .fapi-input:focus,
+#fapi-form-wrapper input[type="text"]:focus,
+#fapi-form-wrapper input[type="email"]:focus,
+#fapi-form-wrapper input[type="tel"]:focus,
+#fapi-form-wrapper input[type="number"]:focus,
+#fapi-form-wrapper select:focus,
+#fapi-form-wrapper textarea:focus {
+  background: var(--vf-white);
+  border-color: var(--vf-gold);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(199, 154, 75, 0.22);
+}
+
+#fapi-form-wrapper input[type="checkbox"],
+#fapi-form-wrapper input[type="radio"] {
+  accent-color: var(--vf-orange);
+}
+
+#fapi-form-wrapper .fapi-form-prices,
+#fapi-form-wrapper .fapi-form-prices-discount,
+#fapi-form-wrapper .fapi-form-prices-repayment-with-vat,
+#fapi-form-wrapper .fapi-form-float-price {
+  color: var(--vf-brown);
+  background: var(--vf-panel-strong);
+  border: 1px solid rgba(199, 154, 75, 0.38);
+  border-radius: 8px;
+}
+
+#fapi-form-wrapper .fapi-form-alert {
+  color: var(--vf-brown);
+  background: #fff7ed;
+  border: 1px solid rgba(255, 75, 0, 0.28);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+#fapi-form-wrapper .fapi-submit-button,
+#fapi-form-wrapper button[type="submit"],
+#fapi-form-wrapper input[type="submit"] {
+  width: 100%;
+  min-height: 52px;
+  color: var(--vf-white);
+  letter-spacing: 0;
+  text-transform: none;
+  background: var(--vf-orange);
+  border: 0;
+  border-radius: 10px;
+  padding: 14px 24px;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: clamp(18px, 2.5vw, 22px);
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  box-shadow: 0 8px 18px rgba(255, 75, 0, 0.18);
+}
+
+#fapi-form-wrapper .fapi-submit-button:hover,
+#fapi-form-wrapper button[type="submit"]:hover,
+#fapi-form-wrapper input[type="submit"]:hover {
+  background: var(--vf-brown);
+  box-shadow: 0 10px 22px rgba(66, 33, 11, 0.18);
+  transform: translateY(-1px);
+}
+
+#fapi-form-wrapper .fapi-submit-button:focus-visible,
+#fapi-form-wrapper button[type="submit"]:focus-visible,
+#fapi-form-wrapper input[type="submit"]:focus-visible {
+  outline: 3px solid rgba(255, 75, 0, 0.32);
+  outline-offset: 3px;
+}
+
+#fapi-form-wrapper .fapi-sending {
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+#fapi-form-wrapper a {
+  color: var(--vf-brown);
+  font-weight: 600;
+  text-decoration-color: rgba(66, 33, 11, 0.35);
+  text-underline-offset: 3px;
+}
+
+#fapi-form-wrapper a:hover {
+  color: var(--vf-orange);
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 640px) {
+  #fapi-form-wrapper {
+    max-width: 100%;
+  }
+
+  #fapi-form-wrapper #fapi-form-form,
+  #fapi-form-wrapper .fapi-order-form {
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  #fapi-form-wrapper .fapi-form-items,
+  #fapi-form-wrapper .fapi-form-basic-data,
+  #fapi-form-wrapper .fapi-form-custom-fields,
+  #fapi-form-wrapper .fapi-form-shipping-methods,
+  #fapi-form-wrapper .fapi-form-payment-methods,
+  #fapi-form-wrapper .fapi-form-result,
+  #fapi-form-wrapper .fapi-form-result-container {
+    padding: 14px;
+  }
+}
