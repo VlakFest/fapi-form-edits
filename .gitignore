@@ -1,2 +1,7 @@
 agents.md
 index-local.html
+/node_modules
+/dist
+.agents
+.codex
+/tmp
