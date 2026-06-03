@@ -1,0 +1,22 @@
+/*
+  Custom CSS for FAPI order form.
+
+  Target form:
+  https://form.fapi.cz/?id=2bf5428f-0a21-4eeb-be54-bfb85522da14
+
+  Recommended wrapper on host page:
+  #fapi-form-wrapper
+
+  Known selectors to verify in rendered DOM:
+  #fapi-form-form
+  .fapi-order-form
+  .fapi-form-items
+  .fapi-form-basic-data
+  .fapi-form-custom-fields
+  .fapi-form-payment-methods
+  .fapi-form-result
+  .fapi-submit-button
+  .fapi-input
+*/
+
+/* Future styles go here. */
