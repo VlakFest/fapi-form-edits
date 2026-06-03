@@ -93,6 +93,105 @@
   line-height: 1.35;
 }
 
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header {
+  display: grid !important;
+  grid-template-columns: 10px minmax(0, 1fr) 10px;
+  align-items: center;
+  cursor: pointer;
+  gap: 12px;
+  text-align: center;
+  transition: background-color 160ms ease, opacity 160ms ease;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform 160ms ease;
+}
+
+#fapi-form-wrapper .vf-collapsible-section[data-vf-expanded="true"] > .fapi-container-header::after {
+  transform: rotate(225deg) translateY(-2px);
+}
+
+#fapi-form-wrapper .vf-collapsible-section[data-vf-locked="true"] > .fapi-container-header {
+  cursor: default;
+  opacity: 0.78;
+}
+
+#fapi-form-wrapper .vf-collapsible-section[data-vf-locked="true"] > .fapi-container-header::after {
+  opacity: 0.55;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header:focus-visible {
+  outline: 3px solid rgba(199, 154, 75, 0.26);
+  outline-offset: 3px;
+}
+
+#fapi-form-wrapper .vf-collapsible-section[data-vf-expanded="false"] {
+  padding-bottom: clamp(16px, 2.4vw, 24px);
+}
+
+#fapi-form-wrapper .vf-section-description {
+  margin: 8px 4px 0;
+  color: var(--vf-muted);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+#fapi-form-wrapper .vf-collapsible-section.vf-validation-attention {
+  animation: vf-validation-attention 2200ms ease;
+}
+
+#fapi-form-wrapper .vf-collapsible-section.vf-validation-attention > .fapi-container-header {
+  color: #8f1d1d;
+  background: #fff1f1 !important;
+}
+
+#fapi-form-wrapper .vf-missing-required {
+  border-radius: 8px;
+}
+
+#fapi-form-wrapper .vf-missing-required :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]) {
+  border-color: #c62828 !important;
+  background-color: #fffafa !important;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.14) !important;
+}
+
+#fapi-form-wrapper .vf-missing-required :is(input[type="checkbox"], input[type="radio"]) {
+  outline: 3px solid rgba(198, 40, 40, 0.24);
+  outline-offset: 3px;
+}
+
+#fapi-form-wrapper .vf-missing-required :is(.f-text-red-500, .f-text-red-600, .f-text-red-700, .f-text-red-900) {
+  color: #a32121 !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.35;
+}
+
+@keyframes vf-validation-attention {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(198, 40, 40, 0);
+  }
+
+  12%,
+  72% {
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.85), 0 12px 28px rgba(198, 40, 40, 0.16);
+  }
+}
+
 #fapi-form-wrapper h1,
 #fapi-form-wrapper h2,
 #fapi-form-wrapper h3,
@@ -101,6 +200,25 @@
   color: var(--vf-brown);
   font-family: Montserrat, Arial, sans-serif;
   font-weight: 700;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header,
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header.fapi-form-basic-block-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header > .fapi-form-basic-block-title {
+  grid-column: 2;
+  justify-self: center;
+  min-width: 0;
+  padding: 0;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit;
 }
 
 #fapi-form-wrapper label,
@@ -166,15 +284,17 @@
 
 #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > label,
 #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) .fapi-form-label,
+#fapi-form-wrapper .vf-note-label,
 #fapi-form-wrapper .vf-note-field > label,
+#fapi-form-wrapper .vf-note-field label,
 #fapi-form-wrapper .vf-note-field .fapi-form-label,
 #fapi-form-wrapper .fapi-form-custom-field:has(textarea) label,
 #fapi-form-wrapper .fapi-form-custom-field:has(textarea) .fapi-form-label {
   margin: 0 !important;
-  color: var(--vf-brown);
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1.35;
+  color: var(--vf-brown) !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  line-height: 1.35 !important;
 }
 
 #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) textarea,
@@ -633,7 +753,9 @@
 #fapi-form-wrapper .fapi-form-result-discount-code button,
 #fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
 #fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
-  width: auto;
+  flex: 0 0 auto !important;
+  width: fit-content !important;
+  min-width: max-content;
   min-height: 44px;
   color: var(--vf-white) !important;
   background: var(--vf-special) !important;
@@ -781,8 +903,9 @@
 #fapi-form-wrapper .fapi-form-result-discount-code button,
 #fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
 #fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
-  flex: 0 0 auto;
-  width: auto;
+  flex: 0 0 auto !important;
+  width: fit-content !important;
+  min-width: max-content;
   min-height: 44px;
   border-radius: 8px !important;
   margin-left: 0 !important;
@@ -830,8 +953,9 @@
   #fapi-form-wrapper .fapi-form-result-discount-code button,
   #fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
   #fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
-    flex: 1 1 100%;
-    width: 100%;
+    flex: 0 0 auto !important;
+    justify-self: start;
+    width: fit-content !important;
     margin-left: 0 !important;
   }
 
@@ -1084,11 +1208,13 @@
 
   #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > label,
   #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) .fapi-form-label,
+  #fapi-form-wrapper .vf-note-label,
   #fapi-form-wrapper .vf-note-field > label,
+  #fapi-form-wrapper .vf-note-field label,
   #fapi-form-wrapper .vf-note-field .fapi-form-label,
   #fapi-form-wrapper .fapi-form-custom-field:has(textarea) label,
   #fapi-form-wrapper .fapi-form-custom-field:has(textarea) .fapi-form-label {
-    font-size: 15px;
+    font-size: 15px !important;
   }
 
   #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) textarea,
