@@ -318,7 +318,10 @@
       return false;
     }
 
-    const field = getFieldContainer(control, control.closest(".fapi-form-basic-data, .fapi-form-custom-fields") || document.body);
+    const field = getFieldContainer(
+      control,
+      control.closest(".fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-result") || document.body
+    );
     const label = field?.querySelector("label, .fapi-form-label");
     const labelText = normalizeText(label?.textContent || "");
 
@@ -371,7 +374,7 @@
       return;
     }
 
-    field.classList.remove("vf-missing-required");
+    field.classList.remove("vf-missing-required", "vf-missing-required-choice");
     field.querySelector(".vf-required-message")?.remove();
   }
 
@@ -384,7 +387,7 @@
       const control = field.querySelector(formControlSelector);
 
       if (!control || !missingControls.includes(control)) {
-        field.classList.remove("vf-missing-required");
+        field.classList.remove("vf-missing-required", "vf-missing-required-choice");
         field.querySelector(".vf-required-message")?.remove();
       }
     });
@@ -397,6 +400,9 @@
       }
 
       field.classList.add("vf-missing-required");
+      if (control instanceof HTMLInputElement && (control.type === "checkbox" || control.type === "radio")) {
+        field.classList.add("vf-missing-required-choice");
+      }
     });
   }
 
@@ -438,6 +444,54 @@
     }
 
     drawAttentionToSection(section, missingControls);
+    return true;
+  }
+
+  function revealInvalidControls(wrapper) {
+    const invalidControls = getInvalidControls(wrapper);
+
+    if (!invalidControls.length) {
+      return false;
+    }
+
+    const controlsBySection = new Map();
+
+    invalidControls.forEach((control) => {
+      const section =
+        getCollapsibleSections(wrapper).find((candidate) => candidate.contains(control)) ||
+        control.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields") ||
+        wrapper;
+
+      if (!controlsBySection.has(section)) {
+        controlsBySection.set(section, []);
+      }
+
+      controlsBySection.get(section).push(control);
+    });
+
+    controlsBySection.forEach((controls, section) => {
+      if (section.classList.contains("vf-collapsible-section")) {
+        drawAttentionToSection(section, controls);
+        return;
+      }
+
+      highlightMissingControls(section, controls);
+    });
+
+    const firstControl = invalidControls[0];
+    const firstSection = Array.from(controlsBySection.keys()).find((section) =>
+      section.contains(firstControl)
+    );
+    const firstField = firstSection ? getFieldContainer(firstControl, firstSection) : null;
+    const scrollTarget = firstField || firstControl;
+
+    window.setTimeout(() => {
+      scrollTarget.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 50);
+
     return true;
   }
 
@@ -578,7 +632,7 @@
         const submitter = event.target.closest(".fapi-submit-button, button[type='submit'], input[type='submit']");
 
         if (submitter && wrapper.contains(submitter)) {
-          revealInvalidBillingSection(wrapper);
+          revealInvalidControls(wrapper);
         }
       },
       true
@@ -591,12 +645,16 @@
           return;
         }
 
-        const section = getCollapsibleSections(wrapper).find((candidate) =>
-          isBillingSection(candidate) && candidate.contains(event.target)
-        );
+        const section =
+          getCollapsibleSections(wrapper).find((candidate) => candidate.contains(event.target)) ||
+          event.target.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields");
 
         if (section) {
-          drawAttentionToSection(section, [event.target]);
+          if (section.classList.contains("vf-collapsible-section")) {
+            drawAttentionToSection(section, [event.target]);
+          } else {
+            highlightMissingControls(section, [event.target]);
+          }
         }
       },
       true
@@ -607,9 +665,9 @@
         return;
       }
 
-      const section = getCollapsibleSections(wrapper).find((candidate) =>
-        isBillingSection(candidate) && candidate.contains(event.target)
-      );
+      const section =
+        getCollapsibleSections(wrapper).find((candidate) => candidate.contains(event.target)) ||
+        event.target.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields");
 
       if (section) {
         clearValidationHighlight(event.target, section);

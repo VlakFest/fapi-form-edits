@@ -1,22 +1,6 @@
 /*
-  Custom CSS for FAPI order form.
-
-  Target form:
-  https://form.fapi.cz/?id=2bf5428f-0a21-4eeb-be54-bfb85522da14
-
-  Recommended wrapper on host page:
-  #fapi-form-wrapper
-
-  Known selectors to verify in rendered DOM:
-  #fapi-form-form
-  .fapi-order-form
-  .fapi-form-items
-  .fapi-form-basic-data
-  .fapi-form-custom-fields
-  .fapi-form-payment-methods
-  .fapi-form-result
-  .fapi-submit-button
-  .fapi-input
+  Custom CSS for the VlakFest FAPI order form.
+  Keep styles scoped to #fapi-form-wrapper so the embed remains portable.
 */
 
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
@@ -33,7 +17,6 @@
   --vf-special-hover: #485d4f;
   --vf-special-soft: #edf2ea;
   --vf-special-border: #bac8b7;
-  --vf-special-accent: #8a6520;
   --vf-white: #ffffff;
 }
 
@@ -44,14 +27,15 @@
   font-family: Montserrat, Arial, sans-serif;
 }
 
-#fapi-form-wrapper *,
-#fapi-form-wrapper *::before,
-#fapi-form-wrapper *::after {
+#fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form, .fapi-form, .fapi-form-container) {
+  margin: 0 !important;
+}
+
+#fapi-form-wrapper *, #fapi-form-wrapper *::before, #fapi-form-wrapper *::after {
   box-sizing: border-box;
 }
 
-#fapi-form-wrapper #fapi-form-form,
-#fapi-form-wrapper .fapi-order-form {
+#fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
   width: 100%;
   color: var(--vf-brown-dark);
   background: var(--vf-white);
@@ -61,13 +45,7 @@
   box-shadow: 0 10px 28px rgba(66, 33, 11, 0.06);
 }
 
-#fapi-form-wrapper .fapi-form-items,
-#fapi-form-wrapper .fapi-form-basic-data,
-#fapi-form-wrapper .fapi-form-custom-fields,
-#fapi-form-wrapper .fapi-form-shipping-methods,
-#fapi-form-wrapper .fapi-form-payment-methods,
-#fapi-form-wrapper .fapi-form-result,
-#fapi-form-wrapper .fapi-form-result-container {
+#fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
   background: var(--vf-panel);
   border: 0;
   border-radius: 8px;
@@ -75,44 +53,145 @@
   padding: clamp(16px, 2.4vw, 24px);
 }
 
-#fapi-form-wrapper .fapi-form-basic-block,
-#fapi-form-wrapper .fapi-form-item-group,
-#fapi-form-wrapper .fapi-form-custom-field {
+#fapi-form-wrapper :is(.fapi-form-basic-block, .fapi-form-item-group, .fapi-form-custom-field) {
   border-color: rgba(221, 212, 192, 0.55);
 }
 
-#fapi-form-wrapper .fapi-container-header,
-#fapi-form-wrapper .fapi-form-basic-block-title {
+#fapi-form-wrapper :is(.fapi-container-header, .fapi-form-basic-block-title) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
   background: var(--vf-panel-strong) !important;
   border: 0 !important;
   border-radius: 8px;
   color: var(--vf-brown);
-  padding: 10px 14px;
+  padding: 0 14px;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 800 !important;
   line-height: 1.35;
+  text-align: center;
 }
 
+#fapi-form-wrapper .fapi-container-header > .fapi-form-basic-block-title {
+  display: block;
+  min-height: 0;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit;
+}
+
+#fapi-form-wrapper :is(h1, h2, h3, legend, .fapi-form-basic-block-title) {
+  color: var(--vf-brown);
+  font-family: Montserrat, Arial, sans-serif;
+  font-weight: 800;
+}
+
+#fapi-form-wrapper :is(label, .fapi-form-label) {
+  color: var(--vf-brown-dark);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+#fapi-form-wrapper :is(.fapi-input, input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea) {
+  width: 100%;
+  min-height: 46px;
+  color: var(--vf-brown-dark);
+  background: var(--vf-white);
+  border: 1px solid var(--vf-line);
+  border-radius: 8px;
+  padding: 11px 13px;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: 15px !important;
+  line-height: 1.4;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+#fapi-form-wrapper :is(.fapi-input, input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea):focus {
+  background: var(--vf-white);
+  border-color: var(--vf-gold);
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(199, 154, 75, 0.22);
+}
+
+#fapi-form-wrapper textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+#fapi-form-wrapper :is(input[type="checkbox"], input[type="radio"]) {
+  width: 16px !important;
+  min-width: 16px;
+  max-width: 16px;
+  height: 16px !important;
+  min-height: 16px !important;
+  padding: 0 !important;
+  border-radius: 4px;
+  accent-color: var(--vf-special);
+}
+
+#fapi-form-wrapper a {
+  color: var(--vf-brown);
+  font-weight: 600;
+  text-decoration-color: rgba(66, 33, 11, 0.35);
+  text-underline-offset: 3px;
+}
+
+#fapi-form-wrapper a:hover {
+  color: var(--vf-special);
+  text-decoration-color: currentColor;
+}
+
+#fapi-form-wrapper .fapi-sending {
+  opacity: 1;
+  pointer-events: none;
+}
+
+#fapi-form-wrapper :is(.fapi-sending, .fapi-form-sending, .fapi-form-loading, [class*="sending"], [class*="loading"]) {
+  color: var(--vf-brown-dark) !important;
+  font-weight: 800 !important;
+}
+
+#fapi-form-wrapper :is(.fapi-sending, .fapi-form-sending, .fapi-form-loading, [class*="sending"], [class*="loading"]) :is(svg, [class*="spinner"], [class*="loader"]) {
+  color: var(--vf-special) !important;
+  border-color: rgba(86, 111, 93, 0.24) !important;
+  border-top-color: var(--vf-special) !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+#fapi-form-wrapper .fapi-form-alert {
+  color: var(--vf-brown);
+  background: #fff7ed;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+/* Collapsible sections added by fapi-custom.js. */
 #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header {
   display: grid !important;
   grid-template-columns: 10px minmax(0, 1fr) 10px;
   align-items: center;
-  cursor: pointer;
+  min-height: 46px;
   gap: 12px;
+  cursor: pointer;
   text-align: center;
   transition: background-color 160ms ease, opacity 160ms ease;
 }
 
-#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::before {
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::before, #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::after {
   content: "";
   width: 10px;
   height: 10px;
 }
 
 #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header::after {
-  content: "";
-  width: 10px;
-  height: 10px;
   border-right: 2px solid currentColor;
   border-bottom: 2px solid currentColor;
   transform: rotate(45deg) translateY(-2px);
@@ -141,6 +220,17 @@
   padding-bottom: clamp(16px, 2.4vw, 24px);
 }
 
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header, #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header.fapi-form-basic-block-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+}
+
+#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header > .fapi-form-basic-block-title {
+  grid-column: 2;
+  justify-self: center;
+  min-width: 0;
+}
+
 #fapi-form-wrapper .vf-section-description {
   margin: 8px 4px 0;
   color: var(--vf-muted);
@@ -158,6 +248,17 @@
   background: #fff1f1 !important;
 }
 
+@keyframes vf-validation-attention {
+
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(198, 40, 40, 0);
+  }
+
+  12%, 72% {
+    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.85), 0 12px 28px rgba(198, 40, 40, 0.16);
+  }
+}
+
 #fapi-form-wrapper .vf-missing-required {
   border-radius: 8px;
 }
@@ -173,6 +274,22 @@
   outline-offset: 3px;
 }
 
+#fapi-form-wrapper .vf-missing-required-choice {
+  width: 100%;
+  margin: 8px 0;
+  border: 2px solid rgba(198, 40, 40, 0.78);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fffafa;
+  box-shadow: 0 8px 18px rgba(198, 40, 40, 0.08);
+}
+
+#fapi-form-wrapper .vf-missing-required-choice label,
+#fapi-form-wrapper .vf-missing-required-choice .fapi-form-label {
+  color: var(--vf-brown-dark) !important;
+  font-weight: 800 !important;
+}
+
 #fapi-form-wrapper .vf-missing-required :is(.f-text-red-500, .f-text-red-600, .f-text-red-700, .f-text-red-900) {
   color: #a32121 !important;
   font-size: 14px !important;
@@ -180,83 +297,8 @@
   line-height: 1.35;
 }
 
-@keyframes vf-validation-attention {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(198, 40, 40, 0);
-  }
-
-  12%,
-  72% {
-    box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.85), 0 12px 28px rgba(198, 40, 40, 0.16);
-  }
-}
-
-#fapi-form-wrapper h1,
-#fapi-form-wrapper h2,
-#fapi-form-wrapper h3,
-#fapi-form-wrapper legend,
-#fapi-form-wrapper .fapi-form-basic-block-title {
-  color: var(--vf-brown);
-  font-family: Montserrat, Arial, sans-serif;
-  font-weight: 700;
-}
-
-#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header,
-#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header.fapi-form-basic-block-title {
-  font-size: 18px !important;
-  font-weight: 800 !important;
-}
-
-#fapi-form-wrapper .vf-collapsible-section > .fapi-container-header > .fapi-form-basic-block-title {
-  grid-column: 2;
-  justify-self: center;
-  min-width: 0;
-  padding: 0;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  line-height: inherit;
-}
-
-#fapi-form-wrapper label,
-#fapi-form-wrapper .fapi-form-label {
-  color: var(--vf-brown-dark);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.45;
-}
-
-#fapi-form-wrapper .fapi-input,
-#fapi-form-wrapper input[type="text"],
-#fapi-form-wrapper input[type="email"],
-#fapi-form-wrapper input[type="tel"],
-#fapi-form-wrapper input[type="number"],
-#fapi-form-wrapper select,
-#fapi-form-wrapper textarea {
-  width: 100%;
-  min-height: 46px;
-  color: var(--vf-brown-dark);
-  background: var(--vf-white);
-  border: 1px solid var(--vf-line);
-  border-radius: 8px;
-  padding: 11px 13px;
-  font-family: Montserrat, Arial, sans-serif;
-  font-size: 15px !important;
-  line-height: 1.4;
-  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-}
-
-#fapi-form-wrapper textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea),
-#fapi-form-wrapper .vf-note-field,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) {
+/* Textarea and note fields can appear in multiple FAPI wrappers. */
+#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
   display: block;
   grid-column: 1 / -1;
   width: 100%;
@@ -264,32 +306,18 @@
   margin-top: 18px !important;
 }
 
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > div,
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) .f-relative,
-#fapi-form-wrapper .vf-note-field > div,
-#fapi-form-wrapper .vf-note-field .f-relative,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) > div,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) .f-relative {
+#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) :is(> div, .f-relative) {
   width: 100%;
   max-width: 100%;
   min-width: 0;
 }
 
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > div,
-#fapi-form-wrapper .vf-note-field > div,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) > div {
+#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) > div {
   display: grid;
   gap: 9px;
 }
 
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > label,
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) .fapi-form-label,
-#fapi-form-wrapper .vf-note-label,
-#fapi-form-wrapper .vf-note-field > label,
-#fapi-form-wrapper .vf-note-field label,
-#fapi-form-wrapper .vf-note-field .fapi-form-label,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) label,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) .fapi-form-label {
+#fapi-form-wrapper :is(.vf-note-label, .vf-note-field > label, .vf-note-field label, .vf-note-field .fapi-form-label, .fapi-form-custom-field:has(textarea) label, .fapi-form-custom-field:has(textarea) .fapi-form-label, .fapi-form-basic-data div:has(> label):has(textarea) > label, .fapi-form-basic-data div:has(> label):has(textarea) .fapi-form-label, .fapi-form-custom-fields div:has(> label):has(textarea) > label, .fapi-form-custom-fields div:has(> label):has(textarea) .fapi-form-label) {
   margin: 0 !important;
   color: var(--vf-brown) !important;
   font-size: 16px !important;
@@ -297,9 +325,7 @@
   line-height: 1.35 !important;
 }
 
-#fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) textarea,
-#fapi-form-wrapper .vf-note-field textarea,
-#fapi-form-wrapper .fapi-form-custom-field:has(textarea) textarea {
+#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) textarea {
   display: block;
   width: 100% !important;
   max-width: 100%;
@@ -307,13 +333,8 @@
   margin: 0 !important;
 }
 
-#fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)),
-#fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)) * {
+#fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)), #fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)) * {
   max-width: 100%;
-}
-
-#fapi-form-wrapper .fapi-form-basic-data .vf-note-field {
-  margin-top: 18px !important;
 }
 
 #fapi-form-wrapper .f-flex:has(.phone-input) {
@@ -365,31 +386,7 @@
   box-shadow: 0 0 0 3px rgba(199, 154, 75, 0.22) !important;
 }
 
-#fapi-form-wrapper .fapi-input:focus,
-#fapi-form-wrapper input[type="text"]:focus,
-#fapi-form-wrapper input[type="email"]:focus,
-#fapi-form-wrapper input[type="tel"]:focus,
-#fapi-form-wrapper input[type="number"]:focus,
-#fapi-form-wrapper select:focus,
-#fapi-form-wrapper textarea:focus {
-  background: var(--vf-white);
-  border-color: var(--vf-gold);
-  outline: 0;
-  box-shadow: 0 0 0 3px rgba(199, 154, 75, 0.22);
-}
-
-#fapi-form-wrapper input[type="checkbox"],
-#fapi-form-wrapper input[type="radio"] {
-  width: 16px !important;
-  min-width: 16px;
-  max-width: 16px;
-  height: 16px !important;
-  min-height: 16px !important;
-  padding: 0 !important;
-  border-radius: 4px;
-  accent-color: var(--vf-special);
-}
-
+/* Passenger blocks are created by JS from repeated FAPI custom fields. */
 #fapi-form-wrapper .fapi-form-custom-fields .f-grid[data-vf-passenger-blocks="ready"] {
   display: grid !important;
   grid-template-columns: 1fr;
@@ -433,8 +430,13 @@
   margin: 0 !important;
 }
 
+/* Product rows. FAPI uses utility-heavy markup, so these selectors stay explicit. */
 #fapi-form-wrapper .fapi-form-items {
   display: block;
+}
+
+#fapi-form-wrapper .fapi-form-items {
+  padding: clamp(10px, 1.6vw, 18px);
 }
 
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row {
@@ -473,8 +475,7 @@
   background: #fffdf8;
 }
 
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="checkbox"]:checked),
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="radio"]:checked) {
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(:is(input[type="checkbox"], input[type="radio"]):checked) {
   background: var(--vf-special-soft);
   border-color: var(--vf-special-border);
   box-shadow: inset 4px 0 0 var(--vf-special);
@@ -493,8 +494,7 @@
   margin-left: 0 !important;
 }
 
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .fapi-form-base-input-checkbox,
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .f-form-radio {
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row :is(.fapi-form-base-input-checkbox, .f-form-radio) {
   grid-column: 1;
   grid-row: 1;
   margin: 2px 0 0 !important;
@@ -518,8 +518,7 @@
   overflow-wrap: anywhere;
 }
 
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="checkbox"]:checked) label,
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="radio"]:checked) label {
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(:is(input[type="checkbox"], input[type="radio"]):checked) label {
   color: var(--vf-brown);
   font-weight: 700;
 }
@@ -560,8 +559,8 @@
   width: 52px !important;
   min-width: 52px;
   max-width: 52px;
-  min-height: 36px;
   height: 36px !important;
+  min-height: 36px;
   padding: 6px 8px;
   color: var(--vf-brown-dark);
   background: var(--vf-white);
@@ -594,9 +593,7 @@
   color: currentColor;
 }
 
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) .f-text-sm.f-text-red-600,
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) .f-text-xs.f-text-red-600,
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) .f-text-gray-400 {
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) :is(.f-text-sm.f-text-red-600, .f-text-xs.f-text-red-600, .f-text-gray-400) {
   margin-top: 5px;
   color: var(--vf-muted) !important;
   font-size: 12px;
@@ -621,8 +618,7 @@
   white-space: nowrap;
 }
 
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="checkbox"]:checked) .fapi-form-item-price:not(.f-line-through),
-#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(input[type="radio"]:checked) .fapi-form-item-price:not(.f-line-through) {
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(:is(input[type="checkbox"], input[type="radio"]):checked) .fapi-form-item-price:not(.f-line-through) {
   font-weight: 800;
 }
 
@@ -640,38 +636,37 @@
 
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > .f-w-full.f-text-sm {
   grid-column: 1 / -1;
+  width: calc(100% - 30px) !important;
+  min-width: 0;
+  max-width: calc(100% - 30px);
   margin: 0 0 0 30px !important;
   color: var(--vf-muted) !important;
   font-size: 13px;
   line-height: 1.55;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
-#fapi-form-wrapper .fapi-form-prices,
-#fapi-form-wrapper .fapi-form-prices-discount,
-#fapi-form-wrapper .fapi-form-prices-repayment-with-vat,
-#fapi-form-wrapper .fapi-form-float-price {
+/* Summary, discounts and submit area. */
+#fapi-form-wrapper :is(.fapi-form-prices, .fapi-form-prices-discount, .fapi-form-prices-repayment-with-vat, .fapi-form-float-price) {
   color: var(--vf-brown);
   background: transparent;
   border: 0;
   border-radius: 8px;
 }
 
-#fapi-form-wrapper .fapi-form-float-price,
-#fapi-form-wrapper .fapi-form-prices-repayment-wo-vat {
+#fapi-form-wrapper :is(.fapi-form-float-price, .fapi-form-prices-repayment-wo-vat) {
   display: none !important;
 }
 
-#fapi-form-wrapper .fapi-form-result-prices,
-#fapi-form-wrapper .fapi-form-result-prices-group,
-#fapi-form-wrapper .fapi-form-prices {
+#fapi-form-wrapper :is(.fapi-form-result-prices, .fapi-form-result-prices-group, .fapi-form-prices) {
   background: var(--vf-white);
   border: 0;
   border-radius: 10px;
   padding: 0;
 }
 
-#fapi-form-wrapper .fapi-form-result-prices,
-#fapi-form-wrapper .fapi-form-result-prices-group {
+#fapi-form-wrapper :is(.fapi-form-result-prices, .fapi-form-result-prices-group) {
   margin-bottom: 12px;
 }
 
@@ -699,30 +694,26 @@
   border-radius: 10px;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code a,
-#fapi-form-wrapper .fapi-form-discountCode {
+#fapi-form-wrapper :is(.fapi-form-result-discount-code a, .fapi-form-discountCode) {
   color: var(--vf-special);
   font-weight: 700;
   text-decoration: none;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code a:hover,
-#fapi-form-wrapper .fapi-form-discountCode:hover {
+#fapi-form-wrapper :is(.fapi-form-result-discount-code a, .fapi-form-discountCode):hover {
   color: var(--vf-special-hover);
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code input,
-#fapi-form-wrapper .fapi-form-result-discount-code .fapi-input {
+#fapi-form-wrapper .fapi-form-result-discount-code :is(input, .fapi-input) {
   min-height: 44px;
   border-color: var(--vf-line);
   border-radius: 8px !important;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="checkbox"],
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="radio"] {
+#fapi-form-wrapper .fapi-form-result-discount-code :is(input[type="checkbox"], input[type="radio"]) {
   flex: 0 0 16px;
 }
 
@@ -741,8 +732,7 @@
   min-width: 0;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="text"],
-#fapi-form-wrapper .fapi-form-result-discount-code .fapi-input:not([type="checkbox"]):not([type="radio"]) {
+#fapi-form-wrapper .fapi-form-result-discount-code :is(input[type="text"], .fapi-input:not([type="checkbox"]):not([type="radio"])) {
   flex: 0 1 230px;
   min-width: 0;
   width: auto;
@@ -750,45 +740,40 @@
   box-shadow: none !important;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code button,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
+#fapi-form-wrapper .fapi-form-result-discount-code :is(button, input[type="button"], input[type="submit"]) {
   flex: 0 0 auto !important;
   width: fit-content !important;
   min-width: max-content;
   min-height: 44px;
+  margin-left: 0 !important;
+  padding: 10px 18px;
   color: var(--vf-white) !important;
   background: var(--vf-special) !important;
   background-color: var(--vf-special) !important;
   border: 0 !important;
   border-radius: 8px !important;
-  margin-left: 0 !important;
-  padding: 10px 14px;
   font-family: Montserrat, Arial, sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.2;
   box-shadow: none;
   transition: background-color 180ms ease, transform 180ms ease;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code *::before,
-#fapi-form-wrapper .fapi-form-result-discount-code *::after {
+#fapi-form-wrapper .fapi-form-result-discount-code :is(button, input[type="button"], input[type="submit"]):hover {
+  background: var(--vf-special-hover) !important;
+  background-color: var(--vf-special-hover) !important;
+  box-shadow: none;
+  transform: translateY(-1px);
+}
+
+#fapi-form-wrapper .fapi-form-result-discount-code *::before, #fapi-form-wrapper .fapi-form-result-discount-code *::after {
   border: 0 !important;
   box-shadow: none !important;
   content: none !important;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code button:hover,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="button"]:hover,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"]:hover {
-  background: var(--vf-special-hover) !important;
-  background-color: var(--vf-special-hover) !important;
-  transform: translateY(-1px);
-}
-
-#fapi-form-wrapper .fapi-form-prices-repayment-with-vat,
-#fapi-form-wrapper .fapi-form-prices-total-to-pay {
+#fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
@@ -806,8 +791,7 @@
   box-shadow: 0 2px 8px rgba(66, 33, 11, 0.04) !important;
 }
 
-#fapi-form-wrapper .fapi-form-prices-repayment-with-vat-label,
-#fapi-form-wrapper .fapi-form-prices-total-to-pay-label {
+#fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat-label, .fapi-form-prices-total-to-pay-label) {
   min-width: 0 !important;
   color: var(--vf-brown-dark) !important;
   letter-spacing: 0;
@@ -817,8 +801,7 @@
   line-height: 1.25;
 }
 
-#fapi-form-wrapper .fapi-form-prices-repayment-with-vat-value,
-#fapi-form-wrapper .fapi-form-prices-total-to-pay-value {
+#fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat-value, .fapi-form-prices-total-to-pay-value) {
   min-width: max-content;
   color: var(--vf-brown) !important;
   font-size: clamp(24px, 3vw, 30px) !important;
@@ -827,34 +810,32 @@
   white-space: nowrap;
 }
 
-#fapi-form-wrapper .fapi-form-alert {
-  color: var(--vf-brown);
-  background: #fff7ed;
-  border: 0;
-  border-radius: 8px;
-  padding: 12px 14px;
-}
-
 #fapi-form-wrapper .fapi-form-result {
   background: var(--vf-panel);
   padding-bottom: clamp(16px, 2.2vw, 22px);
 }
 
-#fapi-form-wrapper .fapi-form-result .fapi-container-header,
-#fapi-form-wrapper .fapi-form-result .fapi-form-basic-block-title {
+#fapi-form-wrapper .fapi-form-result :is(.fapi-container-header, .fapi-form-basic-block-title) {
   text-align: center;
   background: var(--vf-panel-strong) !important;
   border: 0 !important;
   border-radius: 8px;
-  padding: 10px 14px !important;
+  min-height: 46px;
+  padding: 0 14px !important;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 800 !important;
   line-height: 1.35;
 }
 
-#fapi-form-wrapper .fapi-form-result-primary-purposes,
-#fapi-form-wrapper .fapi-form-result-purposes,
-#fapi-form-wrapper .fapi-form-result-terms {
+#fapi-form-wrapper .fapi-form-result .fapi-container-header > .fapi-form-basic-block-title {
+  min-height: 0;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+}
+
+#fapi-form-wrapper :is(.fapi-form-result-primary-purposes, .fapi-form-result-purposes, .fapi-form-result-terms) {
   margin-top: 14px;
 }
 
@@ -862,9 +843,7 @@
   margin-top: 28px;
 }
 
-#fapi-form-wrapper .fapi-submit-button,
-#fapi-form-wrapper button[type="submit"],
-#fapi-form-wrapper input[type="submit"] {
+#fapi-form-wrapper :is(.fapi-submit-button, button[type="submit"], input[type="submit"]) {
   width: 100%;
   min-height: 52px;
   color: var(--vf-white);
@@ -885,118 +864,19 @@
   box-shadow: 0 6px 14px rgba(86, 111, 93, 0.16);
 }
 
-#fapi-form-wrapper .fapi-submit-button:hover,
-#fapi-form-wrapper button[type="submit"]:hover,
-#fapi-form-wrapper input[type="submit"]:hover {
+#fapi-form-wrapper :is(.fapi-submit-button, button[type="submit"], input[type="submit"]):hover {
   background: var(--vf-special-hover);
   box-shadow: 0 8px 18px rgba(86, 111, 93, 0.22);
   transform: translateY(-1px);
 }
 
-#fapi-form-wrapper .fapi-submit-button:focus-visible,
-#fapi-form-wrapper button[type="submit"]:focus-visible,
-#fapi-form-wrapper input[type="submit"]:focus-visible {
+#fapi-form-wrapper :is(.fapi-submit-button, button[type="submit"], input[type="submit"]):focus-visible {
   outline: 3px solid rgba(86, 111, 93, 0.32);
   outline-offset: 3px;
 }
 
-#fapi-form-wrapper .fapi-form-result-discount-code button,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
-  flex: 0 0 auto !important;
-  width: fit-content !important;
-  min-width: max-content;
-  min-height: 44px;
-  border-radius: 8px !important;
-  margin-left: 0 !important;
-  padding: 10px 14px;
-  font-size: 14px;
-  line-height: 1.2;
-  box-shadow: none;
-}
-
-@media (max-width: 520px) {
-  #fapi-form-wrapper .fapi-form-result > .f-p-6 {
-    padding: 12px !important;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-prices,
-  #fapi-form-wrapper .fapi-form-result-prices-group,
-  #fapi-form-wrapper .fapi-form-prices {
-    min-width: 0 !important;
-    max-width: 100% !important;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-prices-group {
-    row-gap: 8px;
-    padding: 10px;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex {
-    display: grid !important;
-    grid-template-columns: 1fr;
-    row-gap: 10px;
-    width: 100%;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex > .f-relative {
-    width: 100%;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-discount-code input[type="text"],
-  #fapi-form-wrapper .fapi-form-result-discount-code .fapi-input:not([type="checkbox"]):not([type="radio"]) {
-    flex-basis: 100%;
-    margin-right: 0 !important;
-    width: 100%;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-discount-code button,
-  #fapi-form-wrapper .fapi-form-result-discount-code input[type="button"],
-  #fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"] {
-    flex: 0 0 auto !important;
-    justify-self: start;
-    width: fit-content !important;
-    margin-left: 0 !important;
-  }
-
-  #fapi-form-wrapper .fapi-form-prices-repayment-with-vat,
-  #fapi-form-wrapper .fapi-form-prices-total-to-pay {
-    gap: 10px;
-    margin-top: 4px !important;
-    padding: 12px 14px !important;
-  }
-}
-
-@media (max-width: 420px) {
-  #fapi-form-wrapper .fapi-form-prices-repayment-with-vat,
-  #fapi-form-wrapper .fapi-form-prices-total-to-pay {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-  }
-
-  #fapi-form-wrapper .fapi-form-prices-repayment-with-vat-label,
-  #fapi-form-wrapper .fapi-form-prices-total-to-pay-label {
-    width: 100%;
-    text-align: left !important;
-  }
-
-  #fapi-form-wrapper .fapi-form-prices-repayment-with-vat-value,
-  #fapi-form-wrapper .fapi-form-prices-total-to-pay-value {
-    text-align: right;
-  }
-}
-
-#fapi-form-wrapper .fapi-form-result-discount-code button:hover,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="button"]:hover,
-#fapi-form-wrapper .fapi-form-result-discount-code input[type="submit"]:hover {
-  background: var(--vf-special-hover) !important;
-  background-color: var(--vf-special-hover) !important;
-  box-shadow: none;
-}
-
-#fapi-form-wrapper [class*="fapi-order-bump-product"],
-#fapi-form-wrapper .fapi-form-discounted-price {
+/* Order bump and FAPI utility color normalization. */
+#fapi-form-wrapper :is([class*="fapi-order-bump-product"], .fapi-form-discounted-price) {
   color: var(--vf-brown-dark) !important;
   background: var(--vf-special-soft) !important;
   border: 0 !important;
@@ -1017,8 +897,7 @@
   background: var(--vf-special);
 }
 
-#fapi-form-wrapper [class*="fapi-order-bump-product"] .fapi-form-basic-block-title,
-#fapi-form-wrapper [class*="fapi-order-bump-product"] .fapi-container-header {
+#fapi-form-wrapper [class*="fapi-order-bump-product"] :is(.fapi-form-basic-block-title, .fapi-container-header) {
   background: transparent !important;
   padding-bottom: 8px;
   color: var(--vf-brown);
@@ -1026,8 +905,7 @@
   text-align: left;
 }
 
-#fapi-form-wrapper [class*="fapi-order-bump-product"] .fapi-form-basic-block-title::after,
-#fapi-form-wrapper [class*="fapi-order-bump-product"] .fapi-container-header::after {
+#fapi-form-wrapper [class*="fapi-order-bump-product"] :is(.fapi-form-basic-block-title, .fapi-container-header)::after {
   content: "Volitelné";
   display: inline-block;
   margin-left: 10px;
@@ -1041,39 +919,22 @@
   text-transform: uppercase;
 }
 
-#fapi-form-wrapper .fapi-form-basic-block-title-after,
-#fapi-form-wrapper [class*="fapi-order-bump-product"] [class*="arrow"],
-#fapi-form-wrapper [class*="fapi-order-bump-product"] [style*="border"][style*="transparent"] {
+#fapi-form-wrapper :is(.fapi-form-basic-block-title-after, [class*="fapi-order-bump-product"] [class*="arrow"], [class*="fapi-order-bump-product"] [style*="border"][style*="transparent"]) {
   display: none !important;
 }
 
-#fapi-form-wrapper [class*="fapi-order-bump-product"] [style*="dashed"],
-#fapi-form-wrapper [style*="dashed"],
-#fapi-form-wrapper [style*="#ff1901"],
-#fapi-form-wrapper [style*="rgb(255, 25, 1)"] {
+#fapi-form-wrapper :is([class*="fapi-order-bump-product"] [style*="dashed"], [style*="dashed"], [style*="#ff1901"], [style*="rgb(255, 25, 1)"]) {
   border-color: var(--vf-special-border) !important;
   border-style: solid !important;
 }
 
-#fapi-form-wrapper [style*="#f6d857"],
-#fapi-form-wrapper [style*="rgb(246, 216, 87)"] {
+#fapi-form-wrapper :is([style*="#f6d857"], [style*="rgb(246, 216, 87)"]) {
   background: var(--vf-white) !important;
+  color: var(--vf-special) !important;
+  border-color: var(--vf-special) !important;
 }
 
-#fapi-form-wrapper [style*="#fbf8eb"],
-#fapi-form-wrapper [style*="rgb(251, 248, 235)"] {
-  background: var(--vf-special-soft) !important;
-}
-
-#fapi-form-wrapper .f-border-red-300,
-#fapi-form-wrapper .f-border-red-400,
-#fapi-form-wrapper .f-border-red-600 {
-  border-color: var(--vf-special-border) !important;
-  border-style: solid !important;
-}
-
-#fapi-form-wrapper .f-bg-red-100,
-#fapi-form-wrapper .f-bg-red-600 {
+#fapi-form-wrapper :is([style*="#fbf8eb"], [style*="rgb(251, 248, 235)"], .f-bg-red-100, .f-bg-red-600) {
   background-color: var(--vf-special-soft) !important;
 }
 
@@ -1081,49 +942,32 @@
   background-color: var(--vf-special) !important;
 }
 
-#fapi-form-wrapper .f-text-red-500,
-#fapi-form-wrapper .f-text-red-600,
-#fapi-form-wrapper .f-text-red-700,
-#fapi-form-wrapper .f-text-red-900 {
+#fapi-form-wrapper :is(.f-border-red-300, .f-border-red-400, .f-border-red-600) {
+  border-color: var(--vf-special-border) !important;
+  border-style: solid !important;
+}
+
+#fapi-form-wrapper :is(.f-text-red-500, .f-text-red-600, .f-text-red-700, .f-text-red-900) {
   color: var(--vf-special) !important;
 }
 
-#fapi-form-wrapper .fapi-sending {
-  opacity: 0.72;
-  pointer-events: none;
-}
-
-#fapi-form-wrapper a {
-  color: var(--vf-brown);
-  font-weight: 600;
-  text-decoration-color: rgba(66, 33, 11, 0.35);
-  text-underline-offset: 3px;
-}
-
-#fapi-form-wrapper a:hover {
-  color: var(--vf-special);
-  text-decoration-color: currentColor;
-}
-
 @media (max-width: 640px) {
+
   #fapi-form-wrapper {
     max-width: 100%;
   }
 
-  #fapi-form-wrapper #fapi-form-form,
-  #fapi-form-wrapper .fapi-order-form {
+  #fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
     border-radius: 8px;
     padding: 16px;
   }
 
-  #fapi-form-wrapper .fapi-form-items,
-  #fapi-form-wrapper .fapi-form-basic-data,
-  #fapi-form-wrapper .fapi-form-custom-fields,
-  #fapi-form-wrapper .fapi-form-shipping-methods,
-  #fapi-form-wrapper .fapi-form-payment-methods,
-  #fapi-form-wrapper .fapi-form-result,
-  #fapi-form-wrapper .fapi-form-result-container {
+  #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
     padding: 14px;
+  }
+
+  #fapi-form-wrapper .fapi-form-items {
+    padding: 8px;
   }
 
   #fapi-form-wrapper .fapi-form-result-prices-group {
@@ -1157,30 +1001,75 @@
   }
 
   #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > .f-w-full.f-text-sm {
+    width: calc(100% - 30px) !important;
+    max-width: calc(100% - 30px);
     margin-left: 30px !important;
   }
 
-  #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea),
-  #fapi-form-wrapper .vf-note-field,
-  #fapi-form-wrapper .fapi-form-custom-field:has(textarea) {
+  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
     margin-top: 16px !important;
   }
 }
 
+@media (max-width: 520px) {
+
+  #fapi-form-wrapper .fapi-form-result > .f-p-6 {
+    padding: 12px !important;
+  }
+
+  #fapi-form-wrapper :is(.fapi-form-result-prices, .fapi-form-result-prices-group, .fapi-form-prices) {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #fapi-form-wrapper .fapi-form-result-prices-group {
+    row-gap: 8px;
+    padding: 10px;
+  }
+
+  #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+    width: 100%;
+  }
+
+  #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex > .f-relative {
+    width: 100%;
+  }
+
+  #fapi-form-wrapper .fapi-form-result-discount-code :is(input[type="text"], .fapi-input:not([type="checkbox"]):not([type="radio"])) {
+    flex-basis: 100%;
+    width: 100%;
+    margin-right: 0 !important;
+  }
+
+  #fapi-form-wrapper .fapi-form-result-discount-code :is(button, input[type="button"], input[type="submit"]) {
+    flex: 0 0 auto !important;
+    justify-self: start;
+    width: fit-content !important;
+    margin-left: 0 !important;
+  }
+
+  #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
+    gap: 10px;
+    margin-top: 4px !important;
+    padding: 12px 14px !important;
+  }
+}
+
 @media (max-width: 420px) {
-  #fapi-form-wrapper #fapi-form-form,
-  #fapi-form-wrapper .fapi-order-form {
+
+  #fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
     padding: 12px;
   }
 
-  #fapi-form-wrapper .fapi-form-items,
-  #fapi-form-wrapper .fapi-form-basic-data,
-  #fapi-form-wrapper .fapi-form-custom-fields,
-  #fapi-form-wrapper .fapi-form-shipping-methods,
-  #fapi-form-wrapper .fapi-form-payment-methods,
-  #fapi-form-wrapper .fapi-form-result,
-  #fapi-form-wrapper .fapi-form-result-container {
+  #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
     padding: 10px;
+  }
+
+  #fapi-form-wrapper .fapi-form-items {
+    padding: 6px;
   }
 
   #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row {
@@ -1196,30 +1085,40 @@
     font-size: 14px;
   }
 
+  #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > .f-w-full.f-text-sm {
+    width: calc(100% - 27px) !important;
+    max-width: calc(100% - 27px);
+    margin-left: 27px !important;
+  }
+
   #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .product-price {
     min-width: 0;
   }
 
-  #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea),
-  #fapi-form-wrapper .vf-note-field,
-  #fapi-form-wrapper .fapi-form-custom-field:has(textarea) {
+  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
     margin-top: 14px !important;
   }
 
-  #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) > label,
-  #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) .fapi-form-label,
-  #fapi-form-wrapper .vf-note-label,
-  #fapi-form-wrapper .vf-note-field > label,
-  #fapi-form-wrapper .vf-note-field label,
-  #fapi-form-wrapper .vf-note-field .fapi-form-label,
-  #fapi-form-wrapper .fapi-form-custom-field:has(textarea) label,
-  #fapi-form-wrapper .fapi-form-custom-field:has(textarea) .fapi-form-label {
+  #fapi-form-wrapper :is(.vf-note-label, .vf-note-field > label, .vf-note-field label, .vf-note-field .fapi-form-label, .fapi-form-custom-field:has(textarea) label, .fapi-form-custom-field:has(textarea) .fapi-form-label, .fapi-form-basic-data div:has(> label):has(textarea) > label, .fapi-form-basic-data div:has(> label):has(textarea) .fapi-form-label, .fapi-form-custom-fields div:has(> label):has(textarea) > label, .fapi-form-custom-fields div:has(> label):has(textarea) .fapi-form-label) {
     font-size: 15px !important;
   }
 
-  #fapi-form-wrapper :is(.fapi-form-basic-data, .fapi-form-custom-fields) div:has(> label):has(textarea) textarea,
-  #fapi-form-wrapper .vf-note-field textarea,
-  #fapi-form-wrapper .fapi-form-custom-field:has(textarea) textarea {
+  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) textarea {
     min-height: 100px;
+  }
+
+  #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat-label, .fapi-form-prices-total-to-pay-label) {
+    width: 100%;
+    text-align: left !important;
+  }
+
+  #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat-value, .fapi-form-prices-total-to-pay-value) {
+    text-align: right;
   }
 }
