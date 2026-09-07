@@ -20,6 +20,8 @@ Unless noted otherwise, customizations in this repository are intended to preser
 
 For a different FAPI form, replace only the `id` value in the FAPI embed script URL.
 
+The stylesheet centers the FAPI form within the wrapper while preserving FAPI's configured maximum width. The outer form shell is transparent, without a border, shadow, or padding, so it does not create a colored frame on the host page. This also applies on mobile screens.
+
 ## Test page
 
 This repository includes a simple `index.html` page for testing the embedded FAPI form together with:

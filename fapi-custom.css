@@ -21,13 +21,18 @@
 }
 
 #fapi-form-wrapper {
+  width: 100%;
   max-width: 860px;
   margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   color: var(--vf-brown-dark);
   font-family: Montserrat, Arial, sans-serif;
 }
 
-#fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form, .fapi-form, .fapi-form-container) {
+#fapi-form-wrapper :is(#fapi-form-form, .fapi-form, .fapi-form-container) {
   margin: 0 !important;
 }
 
@@ -35,7 +40,18 @@
   box-sizing: border-box;
 }
 
-#fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
+#fapi-form-wrapper .fapi-order-form {
+  width: 100%;
+  margin: 0 auto !important;
+  color: var(--vf-brown-dark);
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+#fapi-form-wrapper #fapi-form-form {
   width: 100%;
   color: var(--vf-brown-dark);
   background: var(--vf-white);
@@ -957,7 +973,7 @@
     max-width: 100%;
   }
 
-  #fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
+  #fapi-form-wrapper #fapi-form-form {
     border-radius: 8px;
     padding: 16px;
   }
@@ -1060,7 +1076,7 @@
 
 @media (max-width: 420px) {
 
-  #fapi-form-wrapper :is(#fapi-form-form, .fapi-order-form) {
+  #fapi-form-wrapper #fapi-form-form {
     padding: 12px;
   }
 
