@@ -26,6 +26,7 @@
     "Pokud kupuješ jízdenku pro více lidí, potřebujeme znát jejich kontaktní údaje. Jestli zatím nevíš, kdo s tebou pojede, můžeš nám je doposlat později.";
   const collapsibleSectionSelector = ".fapi-form-basic-data, .fapi-form-custom-fields";
   const validationSectionSelector = `${collapsibleSectionSelector}, .fapi-form-result, .fapi-form-result-container`;
+  const remainingAvailabilitySelector = ".fapi-form-items .fapi-form-item *";
   const formControlSelector = [
     "input:not([type='hidden']):not([type='submit']):not([type='button']):not([type='reset'])",
     "select",
@@ -34,6 +35,40 @@
 
   function normalizeText(value) {
     return value.replace(/\s+/g, " ").trim();
+  }
+
+  function removeRemainingAvailabilityUnit() {
+    const wrapper = document.querySelector(wrapperSelector);
+
+    if (!wrapper) {
+      return false;
+    }
+
+    const availabilityElements = Array.from(
+      wrapper.querySelectorAll(remainingAvailabilitySelector)
+    ).filter((element) => {
+      const text = normalizeText(element.textContent || "");
+
+      return /^zbývá(?:\s|$)/iu.test(text) && /(?:^|\s)(?:kusů|kusy|kus)$/iu.test(text);
+    });
+
+    availabilityElements.forEach((element) => {
+      const textNodes = Array.from(element.childNodes).filter(
+        (node) => node.nodeType === Node.TEXT_NODE
+      );
+
+      for (let index = textNodes.length - 1; index >= 0; index -= 1) {
+        const textNode = textNodes[index];
+        const cleanedText = textNode.nodeValue.replace(/\s*(?:kusů|kusy|kus)\s*$/iu, "");
+
+        if (cleanedText !== textNode.nodeValue) {
+          textNode.nodeValue = cleanedText;
+          break;
+        }
+      }
+    });
+
+    return Boolean(availabilityElements.length);
   }
 
   function getPassengerFieldData(field) {
@@ -545,8 +580,10 @@
 
     const scheduleUpdate = () => {
       enhanceCollapsibleSections();
+      removeRemainingAvailabilityUnit();
       [0, 150, 500].forEach((delay) => {
         window.setTimeout(enhanceCollapsibleSections, delay);
+        window.setTimeout(removeRemainingAvailabilityUnit, delay);
       });
     };
 
@@ -616,6 +653,7 @@
 
   function initPassengerFields() {
     const runEnhancements = () => [
+      removeRemainingAvailabilityUnit,
       enhancePassengerFields,
       enhanceTextareaFields,
       enhanceCollapsibleSections,
