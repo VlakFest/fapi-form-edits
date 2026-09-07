@@ -8,6 +8,8 @@ Unless noted otherwise, customizations in this repository are intended to preser
 
 ## Recommended host-page structure
 
+Copy the following block as a whole to the desired location inside the host page's `<body>`:
+
 ```html
 <link rel="stylesheet" href="https://vlakfest.github.io/fapi-form-edits/fapi-custom.css">
 
