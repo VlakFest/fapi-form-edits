@@ -24,10 +24,8 @@
   const customFieldsTitle = "Tví spolucestující";
   const customFieldsDescription =
     "Pokud kupuješ jízdenku pro více lidí, potřebujeme znát jejich kontaktní údaje. Jestli zatím nevíš, kdo s tebou pojede, můžeš nám je doposlat později.";
-  const collapsibleSectionSelectors = [
-    ".fapi-form-basic-data",
-    ".fapi-form-custom-fields",
-  ];
+  const collapsibleSectionSelector = ".fapi-form-basic-data, .fapi-form-custom-fields";
+  const validationSectionSelector = `${collapsibleSectionSelector}, .fapi-form-result, .fapi-form-result-container`;
   const formControlSelector = [
     "input:not([type='hidden']):not([type='submit']):not([type='button']):not([type='reset'])",
     "select",
@@ -39,19 +37,15 @@
   }
 
   function getPassengerFieldData(field) {
-    const label = Array.from(field.querySelectorAll("label")).find((candidate) =>
-      passengerLabelPattern.test(normalizeText(candidate.textContent || ""))
-    );
+    const label = Array.from(field.querySelectorAll("label")).find((candidate) => {
+      return passengerLabelPattern.test(normalizeText(candidate.textContent || ""));
+    });
 
     if (!label) {
       return null;
     }
 
     const match = normalizeText(label.textContent).match(passengerLabelPattern);
-    if (!match) {
-      return null;
-    }
-
     const fieldType = match[2].toLowerCase();
     let kind = "other";
     let shortLabel = match[2];
@@ -81,10 +75,6 @@
     }
   }
 
-  function getFieldLabel(field) {
-    return field.querySelector(":scope > label") || field.querySelector("label");
-  }
-
   function getTextareaField(textarea, wrapper) {
     let field = textarea.parentElement;
 
@@ -110,7 +100,7 @@
 
     textareas.forEach((textarea) => {
       const field = getTextareaField(textarea, wrapper);
-      const label = field ? getFieldLabel(field) : null;
+      const label = field?.querySelector(":scope > label, label");
 
       if (!field) {
         return;
@@ -217,14 +207,8 @@
     return /^Fakturační údaje$/i.test(getSectionTitle(section)) || isCustomFieldsSection(section);
   }
 
-  function isBillingSection(section) {
-    return /^Fakturační údaje$/i.test(getSectionTitle(section));
-  }
-
   function getCollapsibleSections(wrapper) {
-    return Array.from(
-      wrapper.querySelectorAll(collapsibleSectionSelectors.join(", "))
-    ).filter(isCollapsibleSection);
+    return Array.from(wrapper.querySelectorAll(collapsibleSectionSelector)).filter(isCollapsibleSection);
   }
 
   function hasSelectedOrderItem(wrapper) {
@@ -313,14 +297,26 @@
     return control.parentElement || section;
   }
 
+  function isFormControl(control) {
+    return control instanceof HTMLInputElement ||
+      control instanceof HTMLSelectElement ||
+      control instanceof HTMLTextAreaElement;
+  }
+
+  function getValidationSection(control, wrapper) {
+    return getCollapsibleSections(wrapper).find((section) => section.contains(control)) ||
+      control.closest(validationSectionSelector) ||
+      wrapper;
+  }
+
   function isRequiredControl(control) {
-    if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) {
+    if (!isFormControl(control)) {
       return false;
     }
 
     const field = getFieldContainer(
       control,
-      control.closest(".fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-result") || document.body
+      control.closest(validationSectionSelector) || document.body
     );
     const label = field?.querySelector("label, .fapi-form-label");
     const labelText = normalizeText(label?.textContent || "");
@@ -346,11 +342,7 @@
   }
 
   function isInvalidControl(control, section) {
-    if (!(control instanceof HTMLInputElement || control instanceof HTMLSelectElement || control instanceof HTMLTextAreaElement)) {
-      return false;
-    }
-
-    if (control.disabled) {
+    if (!isFormControl(control) || control.disabled) {
       return false;
     }
 
@@ -362,9 +354,8 @@
   }
 
   function getInvalidControls(section) {
-    const controls = Array.from(section.querySelectorAll(formControlSelector));
-
-    return controls.filter((control) => isInvalidControl(control, section));
+    return Array.from(section.querySelectorAll(formControlSelector))
+      .filter((control) => isInvalidControl(control, section));
   }
 
   function clearValidationHighlight(control, section) {
@@ -375,20 +366,14 @@
     }
 
     field.classList.remove("vf-missing-required", "vf-missing-required-choice");
-    field.querySelector(".vf-required-message")?.remove();
   }
 
   function highlightMissingControls(section, missingControls) {
-    section.querySelectorAll(".vf-required-message").forEach((message) => {
-      message.remove();
-    });
-
-    Array.from(section.querySelectorAll(".vf-missing-required")).forEach((field) => {
+    section.querySelectorAll(".vf-missing-required").forEach((field) => {
       const control = field.querySelector(formControlSelector);
 
       if (!control || !missingControls.includes(control)) {
         field.classList.remove("vf-missing-required", "vf-missing-required-choice");
-        field.querySelector(".vf-required-message")?.remove();
       }
     });
 
@@ -430,23 +415,6 @@
     }, 2400);
   }
 
-  function revealInvalidBillingSection(wrapper) {
-    const section = getCollapsibleSections(wrapper).find(isBillingSection);
-
-    if (!section) {
-      return false;
-    }
-
-    const missingControls = getInvalidControls(section);
-
-    if (!missingControls.length) {
-      return false;
-    }
-
-    drawAttentionToSection(section, missingControls);
-    return true;
-  }
-
   function revealInvalidControls(wrapper) {
     const invalidControls = getInvalidControls(wrapper);
 
@@ -457,10 +425,7 @@
     const controlsBySection = new Map();
 
     invalidControls.forEach((control) => {
-      const section =
-        getCollapsibleSections(wrapper).find((candidate) => candidate.contains(control)) ||
-        control.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields") ||
-        wrapper;
+      const section = getValidationSection(control, wrapper);
 
       if (!controlsBySection.has(section)) {
         controlsBySection.set(section, []);
@@ -479,10 +444,7 @@
     });
 
     const firstControl = invalidControls[0];
-    const firstSection = Array.from(controlsBySection.keys()).find((section) =>
-      section.contains(firstControl)
-    );
-    const firstField = firstSection ? getFieldContainer(firstControl, firstSection) : null;
+    const firstField = getFieldContainer(firstControl, getValidationSection(firstControl, wrapper));
     const scrollTarget = firstField || firstControl;
 
     window.setTimeout(() => {
@@ -574,18 +536,18 @@
     return Boolean(sections.length);
   }
 
-  function bindOrderItemWatcher() {
+  function bindFormEvents() {
     const wrapper = document.querySelector(wrapperSelector);
 
-    if (!wrapper || wrapper.dataset.vfOrderWatcher === "ready") {
+    if (!wrapper || wrapper.dataset.vfFormEvents === "ready") {
       return Boolean(wrapper);
     }
 
     const scheduleUpdate = () => {
       enhanceCollapsibleSections();
-      window.setTimeout(enhanceCollapsibleSections, 0);
-      window.setTimeout(enhanceCollapsibleSections, 150);
-      window.setTimeout(enhanceCollapsibleSections, 500);
+      [0, 150, 500].forEach((delay) => {
+        window.setTimeout(enhanceCollapsibleSections, delay);
+      });
     };
 
     const isOrderItemControl = (target) =>
@@ -593,16 +555,19 @@
       target.closest(".fapi-form-items .fapi-form-item") &&
       (target.type === "checkbox" || target.type === "radio" || target.type === "number");
 
-    wrapper.addEventListener("change", (event) => {
-      if (isOrderItemControl(event.target)) {
-        scheduleUpdate();
-      }
-    });
+    ["change", "input"].forEach((eventName) => {
+      wrapper.addEventListener(eventName, (event) => {
+        if (isOrderItemControl(event.target)) {
+          scheduleUpdate();
+        }
 
-    wrapper.addEventListener("input", (event) => {
-      if (isOrderItemControl(event.target)) {
-        scheduleUpdate();
-      }
+        if (event.target instanceof HTMLElement) {
+          clearValidationHighlight(
+            event.target,
+            getValidationSection(event.target, wrapper)
+          );
+        }
+      });
     });
 
     wrapper.addEventListener("click", (event) => {
@@ -610,17 +575,6 @@
         scheduleUpdate();
       }
     });
-
-    wrapper.dataset.vfOrderWatcher = "ready";
-    return true;
-  }
-
-  function bindBillingValidationWatcher() {
-    const wrapper = document.querySelector(wrapperSelector);
-
-    if (!wrapper || wrapper.dataset.vfBillingValidationWatcher === "ready") {
-      return Boolean(wrapper);
-    }
 
     wrapper.addEventListener(
       "click",
@@ -645,60 +599,30 @@
           return;
         }
 
-        const section =
-          getCollapsibleSections(wrapper).find((candidate) => candidate.contains(event.target)) ||
-          event.target.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields");
+        const section = getValidationSection(event.target, wrapper);
 
-        if (section) {
-          if (section.classList.contains("vf-collapsible-section")) {
-            drawAttentionToSection(section, [event.target]);
-          } else {
-            highlightMissingControls(section, [event.target]);
-          }
+        if (section.classList.contains("vf-collapsible-section")) {
+          drawAttentionToSection(section, [event.target]);
+        } else {
+          highlightMissingControls(section, [event.target]);
         }
       },
       true
     );
 
-    const clearHighlight = (event) => {
-      if (!(event.target instanceof HTMLElement)) {
-        return;
-      }
-
-      const section =
-        getCollapsibleSections(wrapper).find((candidate) => candidate.contains(event.target)) ||
-        event.target.closest(".fapi-form-result, .fapi-form-result-container, .fapi-form-basic-data, .fapi-form-custom-fields");
-
-      if (section) {
-        clearValidationHighlight(event.target, section);
-      }
-    };
-
-    wrapper.addEventListener("input", clearHighlight);
-    wrapper.addEventListener("change", clearHighlight);
-
-    wrapper.dataset.vfBillingValidationWatcher = "ready";
+    wrapper.dataset.vfFormEvents = "ready";
     return true;
   }
 
   function initPassengerFields() {
-    const runEnhancements = () => ({
-      passengersReady: enhancePassengerFields(),
-      textareasReady: enhanceTextareaFields(),
-      collapsibleSectionsReady: enhanceCollapsibleSections(),
-      orderWatcherReady: bindOrderItemWatcher(),
-      billingValidationWatcherReady: bindBillingValidationWatcher(),
-    });
+    const runEnhancements = () => [
+      enhancePassengerFields,
+      enhanceTextareaFields,
+      enhanceCollapsibleSections,
+      bindFormEvents,
+    ].map((enhance) => enhance()).every(Boolean);
 
-    const isReadyEnough = (result) =>
-      result.textareasReady &&
-      result.collapsibleSectionsReady &&
-      result.orderWatcherReady &&
-      result.billingValidationWatcherReady;
-
-    const initialResult = runEnhancements();
-
-    if (isReadyEnough(initialResult) && initialResult.passengersReady) {
+    if (runEnhancements()) {
       return;
     }
 
@@ -717,15 +641,11 @@
         scheduled = false;
         attempts += 1;
 
-        let result;
         try {
-          result = runEnhancements();
+          if (runEnhancements() || attempts > 120) {
+            observer.disconnect();
+          }
         } catch (error) {
-          observer.disconnect();
-          return;
-        }
-
-        if ((isReadyEnough(result) && result.passengersReady) || attempts > 120) {
           observer.disconnect();
         }
       });

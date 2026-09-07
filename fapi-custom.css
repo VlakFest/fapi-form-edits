@@ -332,8 +332,8 @@
   line-height: 1.35;
 }
 
-/* Textarea and note fields can appear in multiple FAPI wrappers. */
-#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
+/* Textarea classes are added by fapi-custom.js after FAPI renders. */
+#fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) {
   display: block;
   grid-column: 1 / -1;
   width: 100%;
@@ -341,18 +341,18 @@
   margin-top: 18px !important;
 }
 
-#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) :is(> div, .f-relative) {
+#fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) :is(> div, .f-relative) {
   width: 100%;
   max-width: 100%;
   min-width: 0;
 }
 
-#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) > div {
+#fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) > div {
   display: grid;
   gap: 9px;
 }
 
-#fapi-form-wrapper :is(.vf-note-label, .vf-note-field > label, .vf-note-field label, .vf-note-field .fapi-form-label, .fapi-form-custom-field:has(textarea) label, .fapi-form-custom-field:has(textarea) .fapi-form-label, .fapi-form-basic-data div:has(> label):has(textarea) > label, .fapi-form-basic-data div:has(> label):has(textarea) .fapi-form-label, .fapi-form-custom-fields div:has(> label):has(textarea) > label, .fapi-form-custom-fields div:has(> label):has(textarea) .fapi-form-label) {
+#fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) :is(label, .fapi-form-label) {
   margin: 0 !important;
   color: var(--vf-brown) !important;
   font-size: 16px !important;
@@ -360,7 +360,7 @@
   line-height: 1.35 !important;
 }
 
-#fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) textarea {
+#fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) textarea {
   display: block;
   width: 100% !important;
   max-width: 100%;
@@ -368,7 +368,8 @@
   margin: 0 !important;
 }
 
-#fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)), #fapi-form-wrapper .fapi-form-basic-data :is(.vf-note-field, div:has(> label):has(textarea)) * {
+#fapi-form-wrapper .fapi-form-basic-data .vf-textarea-field,
+#fapi-form-wrapper .fapi-form-basic-data .vf-textarea-field * {
   max-width: 100%;
 }
 
@@ -391,7 +392,6 @@
   color: var(--vf-brown-dark);
   background: transparent !important;
   border: 1px solid var(--vf-line) !important;
-  border-right: 1px solid var(--vf-line) !important;
   border-radius: 8px 0 0 8px !important;
   box-shadow: none !important;
   font-family: Montserrat, Arial, sans-serif;
@@ -468,9 +468,6 @@
 /* Product rows. FAPI uses utility-heavy markup, so these selectors stay explicit. */
 #fapi-form-wrapper .fapi-form-items {
   display: block;
-}
-
-#fapi-form-wrapper .fapi-form-items {
   padding: clamp(10px, 1.6vw, 18px);
 }
 
@@ -784,7 +781,6 @@
   padding: 10px 18px;
   color: var(--vf-white) !important;
   background: var(--vf-special) !important;
-  background-color: var(--vf-special) !important;
   border: 0 !important;
   border-radius: 8px !important;
   font-family: Montserrat, Arial, sans-serif;
@@ -797,7 +793,6 @@
 
 #fapi-form-wrapper .fapi-form-result-discount-code :is(button, input[type="button"], input[type="submit"]):hover {
   background: var(--vf-special-hover) !important;
-  background-color: var(--vf-special-hover) !important;
   box-shadow: none;
   transform: translateY(-1px);
 }
@@ -846,28 +841,11 @@
 }
 
 #fapi-form-wrapper .fapi-form-result {
-  background: var(--vf-panel);
   padding-bottom: clamp(16px, 2.2vw, 22px);
 }
 
 #fapi-form-wrapper .fapi-form-result :is(.fapi-container-header, .fapi-form-basic-block-title) {
-  text-align: center;
-  background: var(--vf-panel-strong) !important;
-  border: 0 !important;
-  border-radius: 8px;
-  min-height: 46px;
   padding: 0 14px !important;
-  font-size: 18px;
-  font-weight: 800 !important;
-  line-height: 1.35;
-}
-
-#fapi-form-wrapper .fapi-form-result .fapi-container-header > .fapi-form-basic-block-title {
-  min-height: 0;
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0;
 }
 
 #fapi-form-wrapper :is(.fapi-form-result-primary-purposes, .fapi-form-result-purposes, .fapi-form-result-terms) {
@@ -987,25 +965,12 @@
 }
 
 @media (max-width: 640px) {
-
-  #fapi-form-wrapper {
-    max-width: 100%;
-  }
-
   #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
     padding: 14px;
   }
 
   #fapi-form-wrapper .fapi-form-items {
     padding: 8px;
-  }
-
-  #fapi-form-wrapper .fapi-form-result-prices-group {
-    grid-template-columns: 1fr;
-  }
-
-  #fapi-form-wrapper .fapi-form-prices-total-to-pay {
-    justify-content: space-between;
   }
 
   #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row {
@@ -1030,13 +995,7 @@
     min-width: 96px;
   }
 
-  #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > .f-w-full.f-text-sm {
-    width: calc(100% - 30px) !important;
-    max-width: calc(100% - 30px);
-    margin-left: 30px !important;
-  }
-
-  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
+  #fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) {
     margin-top: 16px !important;
   }
 }
@@ -1061,7 +1020,6 @@
     display: grid !important;
     grid-template-columns: 1fr;
     row-gap: 10px;
-    width: 100%;
   }
 
   #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex > .f-relative {
@@ -1071,14 +1029,10 @@
   #fapi-form-wrapper .fapi-form-result-discount-code :is(input[type="text"], .fapi-input:not([type="checkbox"]):not([type="radio"])) {
     flex-basis: 100%;
     width: 100%;
-    margin-right: 0 !important;
   }
 
   #fapi-form-wrapper .fapi-form-result-discount-code :is(button, input[type="button"], input[type="submit"]) {
-    flex: 0 0 auto !important;
     justify-self: start;
-    width: fit-content !important;
-    margin-left: 0 !important;
   }
 
   #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
@@ -1121,15 +1075,15 @@
     min-width: 0;
   }
 
-  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) {
+  #fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) {
     margin-top: 14px !important;
   }
 
-  #fapi-form-wrapper :is(.vf-note-label, .vf-note-field > label, .vf-note-field label, .vf-note-field .fapi-form-label, .fapi-form-custom-field:has(textarea) label, .fapi-form-custom-field:has(textarea) .fapi-form-label, .fapi-form-basic-data div:has(> label):has(textarea) > label, .fapi-form-basic-data div:has(> label):has(textarea) .fapi-form-label, .fapi-form-custom-fields div:has(> label):has(textarea) > label, .fapi-form-custom-fields div:has(> label):has(textarea) .fapi-form-label) {
+  #fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) :is(label, .fapi-form-label) {
     font-size: 15px !important;
   }
 
-  #fapi-form-wrapper :is(.vf-note-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-data div:has(> label):has(textarea), .fapi-form-custom-fields div:has(> label):has(textarea)) textarea {
+  #fapi-form-wrapper :is(.vf-textarea-field, .fapi-form-custom-field:has(textarea), .fapi-form-basic-block div:has(> label):has(textarea)) textarea {
     min-height: 100px;
   }
 
