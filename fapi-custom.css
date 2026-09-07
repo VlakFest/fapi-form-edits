@@ -51,22 +51,41 @@
   box-shadow: none;
 }
 
-#fapi-form-wrapper #fapi-form-form {
+/* FAPI prefixes form IDs dynamically; keep the panel separate from its credit. */
+#fapi-form-wrapper .fapi-order-form > form {
   width: 100%;
+  margin: 0;
   color: var(--vf-brown-dark);
-  background: var(--vf-white);
+  background: var(--vf-panel);
   border: 0;
-  border-radius: 12px;
-  padding: clamp(18px, 3vw, 32px);
-  box-shadow: 0 10px 28px rgba(66, 33, 11, 0.06);
+  padding: 0;
+  box-shadow: none;
+}
+
+#fapi-form-wrapper .fapi-order-form > form + p {
+  margin: 10px 0 0;
+  padding: 0 12px;
+  background: transparent;
+  border: 0;
+  color: var(--vf-muted);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+}
+
+#fapi-form-wrapper .fapi-order-form > form + p a {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
   background: var(--vf-panel);
   border: 0;
-  border-radius: 8px;
-  margin: 0 0 16px;
-  padding: clamp(16px, 2.4vw, 24px);
+  border-radius: 0;
+  margin: 0;
+  padding: clamp(12px, 1.8vw, 18px) clamp(16px, 2.4vw, 24px);
 }
 
 #fapi-form-wrapper :is(.fapi-form-basic-block, .fapi-form-item-group, .fapi-form-custom-field) {
@@ -233,7 +252,7 @@
 }
 
 #fapi-form-wrapper .vf-collapsible-section[data-vf-expanded="false"] {
-  padding-bottom: clamp(16px, 2.4vw, 24px);
+  padding-bottom: clamp(12px, 1.8vw, 18px);
 }
 
 #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header, #fapi-form-wrapper .vf-collapsible-section > .fapi-container-header.fapi-form-basic-block-title {
@@ -944,13 +963,13 @@
   border-style: solid !important;
 }
 
-#fapi-form-wrapper :is([style*="#f6d857"], [style*="rgb(246, 216, 87)"]) {
+#fapi-form-wrapper :not(.fapi-order-form):is([style*="#f6d857"], [style*="rgb(246, 216, 87)"]) {
   background: var(--vf-white) !important;
   color: var(--vf-special) !important;
   border-color: var(--vf-special) !important;
 }
 
-#fapi-form-wrapper :is([style*="#fbf8eb"], [style*="rgb(251, 248, 235)"], .f-bg-red-100, .f-bg-red-600) {
+#fapi-form-wrapper :not(.fapi-order-form):is([style*="#fbf8eb"], [style*="rgb(251, 248, 235)"], .f-bg-red-100, .f-bg-red-600) {
   background-color: var(--vf-special-soft) !important;
 }
 
@@ -971,11 +990,6 @@
 
   #fapi-form-wrapper {
     max-width: 100%;
-  }
-
-  #fapi-form-wrapper #fapi-form-form {
-    border-radius: 8px;
-    padding: 16px;
   }
 
   #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
@@ -1076,10 +1090,6 @@
 
 @media (max-width: 420px) {
 
-  #fapi-form-wrapper #fapi-form-form {
-    padding: 12px;
-  }
-
   #fapi-form-wrapper :is(.fapi-form-items, .fapi-form-basic-data, .fapi-form-custom-fields, .fapi-form-shipping-methods, .fapi-form-payment-methods, .fapi-form-result, .fapi-form-result-container) {
     padding: 10px;
   }
@@ -1137,4 +1147,10 @@
   #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat-value, .fapi-form-prices-total-to-pay-value) {
     text-align: right;
   }
+}
+
+/* Avoid stacking FAPI's content padding with the section's bottom spacing. */
+#fapi-form-wrapper :is(.vf-collapsible-section, .fapi-form-result) > .f-p-6,
+#fapi-form-wrapper .fapi-form-item-group > .f-p-6 {
+  padding-bottom: 0 !important;
 }

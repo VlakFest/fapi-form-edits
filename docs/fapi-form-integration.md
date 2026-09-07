@@ -62,3 +62,7 @@ Then open:
 ```text
 http://localhost:8000/index-local.html
 ```
+
+## Section spacing and FAPI credit
+
+The actual form uses one continuous cream panel. Sections have no outer gaps or rounded card edges; existing headings provide separation, with responsive section padding. The FAPI credit remains directly after the form as a small centered note on a transparent background. Inline color normalization excludes `.fapi-order-form`, whose style attribute contains inherited color variables rather than a colored content block.
