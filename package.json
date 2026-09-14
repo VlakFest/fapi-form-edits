@@ -1,0 +1,12 @@
+{
+  "name": "vlakfest-fapi-form-edits",
+  "private": true,
+  "scripts": {
+    "test": "node tests/regression.mjs",
+    "test:live": "node tests/live.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.60.0",
+    "pngjs": "7.0.0"
+  }
+}

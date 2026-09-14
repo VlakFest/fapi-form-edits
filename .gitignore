@@ -6,3 +6,9 @@ index-local.html
 .codex
 /tmp
 .playwright-cli
+
+/output/
+package-lock.json
+*.md
+*.mjs
+

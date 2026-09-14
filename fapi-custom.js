@@ -72,15 +72,22 @@
   }
 
   function getPassengerFieldData(field) {
-    const label = Array.from(field.querySelectorAll("label")).find((candidate) => {
-      return passengerLabelPattern.test(normalizeText(candidate.textContent || ""));
-    });
+    let label;
+    let match;
+
+    for (const candidate of field.querySelectorAll("label")) {
+      match = normalizeText(candidate.textContent || "").match(passengerLabelPattern);
+
+      if (match) {
+        label = candidate;
+        break;
+      }
+    }
 
     if (!label) {
       return null;
     }
 
-    const match = normalizeText(label.textContent).match(passengerLabelPattern);
     const fieldType = match[2].toLowerCase();
     let kind = "other";
     let shortLabel = match[2];
@@ -110,18 +117,22 @@
     }
   }
 
-  function getTextareaField(textarea, wrapper) {
-    let field = textarea.parentElement;
+  function findFieldContainer(control, boundary, labelSelector) {
+    let field = control.parentElement;
 
-    while (field && field !== wrapper) {
-      if (field.classList.contains("fapi-form-custom-field") || field.querySelector(":scope > label")) {
+    while (field && field !== boundary) {
+      if (field.classList.contains("fapi-form-custom-field") || field.querySelector(labelSelector)) {
         return field;
       }
 
       field = field.parentElement;
     }
 
-    return textarea.parentElement;
+    return control.parentElement;
+  }
+
+  function getTextareaField(textarea, wrapper) {
+    return findFieldContainer(textarea, wrapper, ":scope > label");
   }
 
   function enhanceTextareaFields() {
@@ -316,26 +327,18 @@
   }
 
   function getFieldContainer(control, section) {
-    let field = control.parentElement;
-    while (field && field !== section) {
-      if (field.matches(".fapi-form-custom-field")) {
-        return field;
-      }
-
-      if (field.querySelector(":scope > label, :scope > .fapi-form-label")) {
-        return field;
-      }
-
-      field = field.parentElement;
-    }
-
-    return control.parentElement || section;
+    return findFieldContainer(control, section, ":scope > label, :scope > .fapi-form-label") || section;
   }
 
   function isFormControl(control) {
     return control instanceof HTMLInputElement ||
       control instanceof HTMLSelectElement ||
       control instanceof HTMLTextAreaElement;
+  }
+
+  function isChoiceControl(control) {
+    return control instanceof HTMLInputElement &&
+      (control.type === "checkbox" || control.type === "radio");
   }
 
   function getValidationSection(control, wrapper) {
@@ -364,7 +367,7 @@
       return false;
     }
 
-    if (control instanceof HTMLInputElement && (control.type === "checkbox" || control.type === "radio")) {
+    if (isChoiceControl(control)) {
       const name = control.name;
       const group = name
         ? Array.from(section.querySelectorAll(`input[type="${control.type}"]`)).filter((input) => input.name === name)
@@ -420,7 +423,7 @@
       }
 
       field.classList.add("vf-missing-required");
-      if (control instanceof HTMLInputElement && (control.type === "checkbox" || control.type === "radio")) {
+      if (isChoiceControl(control)) {
         field.classList.add("vf-missing-required-choice");
       }
     });

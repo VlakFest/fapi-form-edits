@@ -598,7 +598,6 @@
   background: var(--vf-white);
   border-color: var(--vf-line);
   border-radius: 8px;
-  font-size: 15px;
   font-weight: 500;
   line-height: 1;
   text-align: center;
@@ -984,10 +983,6 @@
     row-gap: 8px;
     justify-self: stretch;
     width: 100%;
-  }
-
-  #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) > div:first-child {
-    justify-self: end;
   }
 
   #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .product-price {

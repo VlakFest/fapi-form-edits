@@ -111,3 +111,11 @@ The actual form uses one continuous cream panel with a thin neutral outline. Sec
 ## Maintenance
 
 CSS rules share the common FAPI selectors and retain `:has()` fallbacks for fields that render before JavaScript initialization. JavaScript keeps all delegated form events behind one binding function and all dynamic enhancements behind one readiness check; delayed updates and the mutation observer remain in place for FAPI's asynchronous rendering.
+
+## Refactor regression checks
+
+The shared JavaScript helpers preserve the distinct textarea/validation field-container rules, choice-control validation, original DOM nodes and enhancement timing. CSS removes only the overridden quantity font size and an identical mobile alignment rule.
+
+Run `npm ci`, install the Playwright browsers with `npx playwright install chromium firefox webkit`, then run `npm test` and `npm run test:live`. The live runner serves the versioned `tests/live.html` itself and does not depend on `index-local.html`. Production loading and the transferable embed remain unchanged.
+
+See [test instructions and coverage](../tests/README.md), [second analysis](refactor-analysis.md), and [verification report](refactor-verification.md). Test dependencies are development-only; no build or runtime dependency is required by the embedded form.
