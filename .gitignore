@@ -11,4 +11,4 @@ index-local.html
 package-lock.json
 *.md
 *.mjs
-
+!tests/availability.mjs

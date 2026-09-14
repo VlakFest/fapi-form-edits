@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "test": "node tests/regression.mjs",
+    "test:availability": "node tests/availability.mjs",
     "test:live": "node tests/live.mjs"
   },
   "devDependencies": {

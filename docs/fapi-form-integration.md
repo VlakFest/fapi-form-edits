@@ -8,7 +8,7 @@ Unless noted otherwise, customizations in this repository are intended to preser
 
 ## Webflow integration
 
-In Webflow, split the integration into three places. Do not put the custom
+On the webpage, split the integration into three places. Do not put the custom
 JavaScript into the same Embed element as the FAPI script.
 
 Add this to the page's **Inside `<head>` tag** custom code:
@@ -61,7 +61,57 @@ The stylesheet centers the FAPI form within the wrapper while preserving FAPI's 
 
 ## Remaining availability
 
-The unit `kus`, `kusy`, or `kusů` is always removed from FAPI's remaining-availability message, so for example `zbývá 10 kusů` is displayed as `zbývá 10`. Use FAPI's native product setting to show or hide the remaining-availability message itself. This text-only customization does not change FAPI's available-quantity enforcement.
+The script groups related product rows into shared client-side capacity pools. The
+non-student individual-place row is the authoritative source for the pool's
+initial availability. Student rows display and consume the same balance; their
+own FAPI availability text is ignored by the client-side calculation.
+
+Whole compartments consume the corresponding number of individual places:
+
+- one whole three-bed sleeping compartment consumes 3 places
+- one whole four-bed sleeping compartment consumes 4 places
+- one whole six-place couchette compartment consumes 6 places
+
+The number displayed for a whole compartment is
+`floor(remaining individual places / compartment size)`. Open-plan couchettes
+(`plackart`) have no whole-compartment row and use a separate pool.
+
+Every quantity input receives a dynamic maximum based on the other selections
+in its pool. The plus control is blocked at that maximum. If a manually entered
+quantity exceeds it, the value is clamped and the row displays
+`Maximální dostupné množství je X.` For a zero maximum, the message is
+`Tady už nic nezbývá.` Decreasing a quantity immediately returns
+its weighted capacity to every linked row, and the shared balance never falls
+below zero.
+Quantity fields accept only non-negative whole numbers. Typing non-digit
+characters and pasting non-digit text is blocked; programmatic values and
+prefilled decimals are normalized before use. Selecting an unavailable row via
+its checkbox or label is blocked with the same maximum-quantity message, without
+changing other selections. Already selected rows can still be deselected.
+The maximum-quantity message disappears when another linked row releases enough
+capacity to increase that row's maximum above the value shown in the message.
+
+The editable `remainingAvailabilityLimits` object near the top of `fapi-custom.js`
+controls when the recalculated availability message is shown:
+
+- `couchette: 42` — individual couchettes, including the student variant
+- `openPlanCouchette: 42` — individual couchettes in an open-plan coach (`plackart`), including the student variant
+- `bed: 24` — individual beds
+- `fourBed: 24` — individual beds in a four-bed compartment
+- `couchetteCompartment: 7` — whole couchette compartments
+- `bedCompartment: 8` — whole sleeping compartments
+- `fourBedCompartment: 8` — whole four-bed sleeping compartments
+
+The message is visible when the remaining count is less than or equal to its
+limit and hidden above it. Individual places use Czech inflection (`1 místo`,
+`2–4 místa`, otherwise `míst`); whole compartments use the invariant `kupé`.
+Counts 2–4 use `Zbývají`; all other counts use `Zbývá`, for both places and compartments.
+The message is centered below the numeric quantity field.
+
+This client-side customization does not create a shared server-side inventory in
+FAPI. On each new page load, the shared balance starts from the current
+availability of the non-student individual-place product. FAPI remains
+authoritative when the order is submitted.
 
 ## Test page
 

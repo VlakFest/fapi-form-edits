@@ -584,6 +584,19 @@
   line-height: 1;
 }
 
+/* Keep the unit outside the measured control width for exact centering below. */
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(.vf-remaining-availability) div:has(> input[type="number"])::after {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-left: 2px;
+  transform: translateY(-50%);
+}
+
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(.vf-remaining-availability) div:has(> input[type="number"]) {
+  position: relative;
+}
+
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row input[type="number"] {
   width: 52px !important;
   min-width: 52px;
@@ -616,6 +629,14 @@
   border-color: var(--vf-special);
 }
 
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .f-flex-shrink-0.f-w-6.f-h-6.vf-capacity-limit {
+  color: var(--vf-muted);
+  background: var(--vf-panel);
+  border-color: var(--vf-line);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .f-flex-shrink-0.f-w-6.f-h-6 svg {
   width: 14px !important;
   color: currentColor;
@@ -626,6 +647,25 @@
   color: var(--vf-muted) !important;
   font-size: 12px;
   font-weight: 500;
+  line-height: 1.3;
+  text-align: right;
+}
+
+/* Center the remaining count below the numeric quantity input. */
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) > div:first-child .vf-remaining-availability {
+  width: max-content;
+  margin: 5px auto 0;
+  transform: none;
+  text-align: center;
+  white-space: nowrap;
+}
+
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row .vf-capacity-message {
+  max-width: 190px;
+  margin: 5px 0 0 auto;
+  color: var(--vf-error, #b42318);
+  font-size: 12px;
+  font-weight: 600;
   line-height: 1.3;
   text-align: right;
 }
