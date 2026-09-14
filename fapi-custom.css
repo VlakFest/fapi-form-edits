@@ -10,6 +10,7 @@
   --vf-brown-dark: #1e1a12;
   --vf-muted: #7a6e5a;
   --vf-line: #ddd4c0;
+  --vf-card-border: rgba(221, 212, 192, 0.95);
   --vf-panel: #f8f4ee;
   --vf-panel-strong: #f5edd8;
   --vf-gold: #c79a4b;
@@ -305,27 +306,23 @@
 }
 
 #fapi-form-wrapper .vf-missing-required :is(input[type="checkbox"], input[type="radio"]) {
-  outline: 3px solid rgba(198, 40, 40, 0.24);
-  outline-offset: 3px;
+  background-color: #fffafa !important;
+  border: 2px solid #c62828 !important;
+  outline: 0 !important;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.14) !important;
 }
 
 #fapi-form-wrapper .vf-missing-required-choice {
-  width: 100%;
-  margin: 8px 0;
-  border: 2px solid rgba(198, 40, 40, 0.78);
-  border-radius: 8px;
-  padding: 10px 12px;
-  background: #fffafa;
-  box-shadow: 0 8px 18px rgba(198, 40, 40, 0.08);
+  width: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-#fapi-form-wrapper .vf-missing-required-choice label,
-#fapi-form-wrapper .vf-missing-required-choice .fapi-form-label {
-  color: var(--vf-brown-dark) !important;
-  font-weight: 800 !important;
-}
-
-#fapi-form-wrapper .vf-missing-required :is(.f-text-red-500, .f-text-red-600, .f-text-red-700, .f-text-red-900) {
+#fapi-form-wrapper :is(.vf-missing-required, .fapi-form-result) :is(.f-text-red-500, .f-text-red-600, .f-text-red-700, .f-text-red-900) {
   color: #a32121 !important;
   font-size: 14px !important;
   font-weight: 800 !important;
@@ -483,7 +480,7 @@
   padding: 14px 16px;
   color: var(--vf-brown-dark);
   background: var(--vf-white);
-  border: 1px solid rgba(221, 212, 192, 0.75);
+  border: 1px solid var(--vf-card-border);
   border-radius: 0;
   box-shadow: none;
   transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
@@ -678,6 +675,19 @@
   word-break: normal;
 }
 
+/* Selected payment method follows the same state color as selected products. */
+#fapi-form-wrapper .fapi-form-payment-method > [role="button"] {
+  transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+#fapi-form-wrapper .fapi-form-payment-method > .payment-method-selected {
+  color: var(--vf-brown-dark) !important;
+  background: var(--vf-special-soft) !important;
+  border: 2px solid var(--vf-special) !important;
+  box-shadow: 0 0 0 2px rgba(86, 111, 93, 0.12), 0 6px 14px rgba(66, 33, 11, 0.1) !important;
+  transform: translateY(-1px);
+}
+
 /* Summary, discounts and submit area. */
 #fapi-form-wrapper :is(.fapi-form-prices, .fapi-form-prices-discount, .fapi-form-prices-repayment-with-vat, .fapi-form-float-price) {
   color: var(--vf-brown);
@@ -697,6 +707,12 @@
   padding: 0;
 }
 
+#fapi-form-wrapper .fapi-form-result-prices.fapi-form-prices {
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0;
+}
+
 #fapi-form-wrapper :is(.fapi-form-result-prices, .fapi-form-result-prices-group) {
   margin-bottom: 12px;
 }
@@ -704,9 +720,10 @@
 #fapi-form-wrapper .fapi-form-result-prices-group {
   display: grid !important;
   grid-template-columns: 1fr;
-  row-gap: 10px;
+  row-gap: 14px;
   align-items: stretch;
-  padding: 14px;
+  padding: 0;
+  background: transparent;
 }
 
 #fapi-form-wrapper .fapi-form-result-discount-code {
@@ -718,11 +735,15 @@
   max-width: 100%;
   min-width: 0;
   margin: 0;
-  padding: 0;
+  padding: 13px 15px;
   color: var(--vf-brown-dark);
-  background: transparent;
-  border: 0;
-  border-radius: 10px;
+  background: var(--vf-special-soft);
+  border: 1px solid var(--vf-card-border);
+  border-radius: 8px;
+}
+
+#fapi-form-wrapper .fapi-form-result-discount-code:has(input[type="checkbox"]:checked) {
+  border-color: var(--vf-special-border);
 }
 
 #fapi-form-wrapper :is(.fapi-form-result-discount-code a, .fapi-form-discountCode) {
@@ -802,6 +823,15 @@
   content: none !important;
 }
 
+#fapi-form-wrapper .fapi-form-result-discount-code > .f-text-red-500 {
+  margin-top: 10px;
+  padding: 8px 10px;
+  color: #8f1d1d !important;
+  background: #fff1f1;
+  border-left: 3px solid #c62828;
+  border-radius: 6px;
+}
+
 #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
   display: flex !important;
   align-items: center;
@@ -810,12 +840,11 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  margin: 6px 0 0 !important;
+  margin: 0 !important;
   padding: 14px 16px !important;
   color: var(--vf-brown-dark) !important;
   background: #fffdf8 !important;
-  border: 1px solid rgba(221, 212, 192, 0.95) !important;
-  border-top: 2px solid rgba(199, 154, 75, 0.42) !important;
+  border: 1px solid var(--vf-card-border) !important;
   border-radius: 8px !important;
   box-shadow: 0 2px 8px rgba(66, 33, 11, 0.04) !important;
 }
@@ -1007,8 +1036,8 @@
   }
 
   #fapi-form-wrapper .fapi-form-result-prices-group {
-    row-gap: 8px;
-    padding: 10px;
+    row-gap: 12px;
+    padding: 0;
   }
 
   #fapi-form-wrapper .fapi-form-result-discount-code > .f-mt-1.f-flex {
@@ -1032,7 +1061,7 @@
 
   #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
     gap: 10px;
-    margin-top: 4px !important;
+    margin-top: 0 !important;
     padding: 12px 14px !important;
   }
 }
