@@ -832,6 +832,36 @@
   border-radius: 6px;
 }
 
+/* The original FAPI savings row stays in its Vue-owned price block; JS mirrors it here. */
+#fapi-form-wrapper .vf-discount-savings-source {
+  display: none !important;
+}
+
+#fapi-form-wrapper .fapi-form-result-discount-code > .vf-discount-savings {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 10px;
+  color: var(--vf-brown-dark);
+  border-top: 1px solid var(--vf-special-border);
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+#fapi-form-wrapper .vf-discount-savings-label {
+  font-weight: 700;
+}
+
+#fapi-form-wrapper .vf-discount-savings-value {
+  color: var(--vf-special-hover);
+  font-size: 16px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
 #fapi-form-wrapper :is(.fapi-form-prices-repayment-with-vat, .fapi-form-prices-total-to-pay) {
   display: flex !important;
   align-items: center;

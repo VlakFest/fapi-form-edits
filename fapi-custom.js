@@ -71,6 +71,58 @@
     return Boolean(availabilityElements.length);
   }
 
+  function enhanceDiscountSavings() {
+    const wrapper = document.querySelector(wrapperSelector);
+
+    if (!wrapper) {
+      return false;
+    }
+
+    const discountCode = wrapper.querySelector(".fapi-form-result-discount-code");
+    const source = wrapper.querySelector(
+      ".fapi-form-prices-total-discount:not(.vf-discount-savings)"
+    );
+    const current = discountCode?.querySelector(":scope > .vf-discount-savings");
+
+    if (!discountCode) {
+      return false;
+    }
+
+    if (!source) {
+      current?.remove();
+      return true;
+    }
+
+    const sourceLabel = source.querySelector(".fapi-form-prices-total-discount-label");
+    const sourceValue = source.querySelector(".fapi-form-prices-total-discount-value");
+    let savings = current;
+
+    source.classList.add("vf-discount-savings-source");
+
+    if (sourceLabel && normalizeText(sourceLabel.textContent || "") !== "Ušetříš:") {
+      sourceLabel.textContent = "Ušetříš:";
+    }
+
+    if (!savings) {
+      savings = document.createElement("div");
+      savings.className = "vf-discount-savings";
+      savings.setAttribute("aria-live", "polite");
+      savings.innerHTML =
+        '<span class="vf-discount-savings-label">Ušetříš:</span>' +
+        '<span class="vf-discount-savings-value"></span>';
+      discountCode.appendChild(savings);
+    }
+
+    const value = savings.querySelector(".vf-discount-savings-value");
+    const valueText = normalizeText(sourceValue?.textContent || "");
+
+    if (value && normalizeText(value.textContent || "") !== valueText) {
+      value.textContent = valueText;
+    }
+
+    return true;
+  }
+
   function getPassengerFieldData(field) {
     let label;
     let match;
@@ -584,9 +636,11 @@
     const scheduleUpdate = () => {
       enhanceCollapsibleSections();
       removeRemainingAvailabilityUnit();
+      enhanceDiscountSavings();
       [0, 150, 500].forEach((delay) => {
         window.setTimeout(enhanceCollapsibleSections, delay);
         window.setTimeout(removeRemainingAvailabilityUnit, delay);
+        window.setTimeout(enhanceDiscountSavings, delay);
       });
     };
 
@@ -650,6 +704,16 @@
       true
     );
 
+    const discountSavingsObserver = new MutationObserver(() => {
+      enhanceDiscountSavings();
+    });
+
+    discountSavingsObserver.observe(wrapper, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+
     wrapper.dataset.vfFormEvents = "ready";
     return true;
   }
@@ -657,6 +721,7 @@
   function initPassengerFields() {
     const runEnhancements = () => [
       removeRemainingAvailabilityUnit,
+      enhanceDiscountSavings,
       enhancePassengerFields,
       enhanceTextareaFields,
       enhanceCollapsibleSections,
