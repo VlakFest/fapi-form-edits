@@ -16,9 +16,7 @@ try {
       <div class="fapi-form-items"><div class="fapi-form-item-group">
         <div class="fapi-container-header">
           <div class="fapi-form-basic-block-title">Položky a ceny</div>
-          <div class="fapi-form-basic-block-title-after">
-            <select id="currency"><option value="CZK">Kč</option></select>
-          </div>
+          <div class="fapi-form-basic-block-title-after"></div>
         </div>
       </div></div>
     </div>
@@ -33,6 +31,16 @@ try {
   assert.equal(await control.evaluate((element) => getComputedStyle(element).display), "none");
   assert.equal(await page.locator(".vf-currency-trigger").count(), 0);
   assert.equal(await control.getAttribute("data-vf-tooltip"), null);
+
+  await control.evaluate((element) => {
+    const select = document.createElement("select");
+    select.id = "currency";
+    select.add(new Option("Kč", "CZK"));
+    element.append(select);
+  });
+  await page.waitForFunction(() => document.querySelector("#currency"));
+  assert.equal(await control.evaluate((element) => getComputedStyle(element).display), "none");
+  assert.equal(await page.locator(".vf-currency-trigger").count(), 0);
 
   await page.locator("#currency").evaluate((select) => {
     select.add(new Option("€", "EUR"));

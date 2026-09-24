@@ -103,20 +103,16 @@
       currencyObserverWrappers.add(wrapper);
     }
 
-    const select = wrapper.querySelector(
-      ".fapi-form-items .fapi-form-basic-block-title-after select"
+    const control = wrapper.querySelector(
+      ".fapi-form-items .fapi-form-item-group > .fapi-container-header > .fapi-form-basic-block-title-after"
     );
 
-    if (!select) {
-      return true;
-    }
-
-    const control = select.closest(".fapi-form-basic-block-title-after");
     if (!control) {
       return true;
     }
 
-    const hasAlternativeCurrency = select.options.length > 1;
+    const select = control.querySelector("select");
+    const hasAlternativeCurrency = Boolean(select && select.options.length > 1);
     control.classList.toggle("vf-single-currency", !hasAlternativeCurrency);
 
     if (!hasAlternativeCurrency) {
@@ -126,7 +122,7 @@
       delete control.dataset.vfTooltip;
       delete control.dataset.vfTooltipSuppressed;
 
-      if (select.classList.contains("vf-native-currency-select")) {
+      if (select?.classList.contains("vf-native-currency-select")) {
         select.classList.remove("vf-native-currency-select");
         select.removeAttribute("aria-hidden");
         select.removeAttribute("aria-label");

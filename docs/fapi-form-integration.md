@@ -53,8 +53,8 @@ already exists. The script's mutation observer then waits for FAPI's asynchronou
 form rendering before adding collapsible sections and passenger-field blocks.
 
 The currency control is shown only when FAPI provides at least two currency
-options. For a single configured currency, its empty header slot, arrow, and
-tooltip are hidden.
+options. When FAPI renders no currency selector or only one currency, its empty
+header slot, arrow, and tooltip are hidden.
 
 ## Plain HTML integration
 
