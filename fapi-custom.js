@@ -27,6 +27,8 @@
   const collapsibleSectionSelector = ".fapi-form-basic-data, .fapi-form-custom-fields";
   const validationSectionSelector = `${collapsibleSectionSelector}, .fapi-form-result, .fapi-form-result-container`;
   const remainingAvailabilitySelector = ".fapi-form-items .fapi-form-item *";
+  const currencyObserverWrappers = new WeakSet();
+  let currencyTooltipSuppressedUntil = 0;
   // Show remaining availability only at or below these editable limits.
   const remainingAvailabilityLimits = {
     couchette: 42, // Lehátko v kupé pro 6, včetně studentské varianty.
@@ -74,6 +76,182 @@
       .normalize("NFD")
       .replace(/\p{Diacritic}/gu, "")
       .toLowerCase();
+  }
+
+  function enhanceCurrencySelector() {
+    const wrapper = document.querySelector(wrapperSelector);
+
+    if (!wrapper) {
+      return false;
+    }
+
+    if (!currencyObserverWrappers.has(wrapper)) {
+      let scheduled = false;
+      const observer = new MutationObserver(() => {
+        if (scheduled) {
+          return;
+        }
+
+        scheduled = true;
+        window.requestAnimationFrame(() => {
+          scheduled = false;
+          enhanceCurrencySelector();
+        });
+      });
+
+      observer.observe(wrapper, { childList: true, subtree: true });
+      currencyObserverWrappers.add(wrapper);
+    }
+
+    const select = wrapper.querySelector(
+      ".fapi-form-items .fapi-form-basic-block-title-after select"
+    );
+
+    if (!select) {
+      return true;
+    }
+
+    const tooltip = "Vyber si měnu objednávky";
+    select.setAttribute("aria-label", tooltip);
+
+    const control = select.closest(".fapi-form-basic-block-title-after");
+    if (!control) {
+      return true;
+    }
+
+    control.dataset.vfTooltip = tooltip;
+    const tooltipSuppressionRemaining = currencyTooltipSuppressedUntil - Date.now();
+    if (tooltipSuppressionRemaining > 0) {
+      control.dataset.vfTooltipSuppressed = "true";
+      window.setTimeout(() => {
+        if (Date.now() >= currencyTooltipSuppressedUntil) {
+          delete control.dataset.vfTooltipSuppressed;
+        }
+      }, tooltipSuppressionRemaining);
+    }
+
+    const currentTrigger = control.querySelector(".vf-currency-trigger");
+    if (currentTrigger) {
+      const value = currentTrigger.querySelector(".vf-currency-value");
+      if (value) {
+        value.textContent = select.selectedOptions[0]?.textContent.trim() || select.value;
+      }
+      return true;
+    }
+
+    select.classList.add("vf-native-currency-select");
+    select.tabIndex = -1;
+    select.setAttribute("aria-hidden", "true");
+
+    const menuId = `${select.id || "vf-currency"}-custom-menu`;
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "vf-currency-trigger";
+    trigger.setAttribute("aria-label", tooltip);
+    trigger.setAttribute("aria-haspopup", "listbox");
+    trigger.setAttribute("aria-expanded", "false");
+    trigger.setAttribute("aria-controls", menuId);
+
+    const value = document.createElement("span");
+    value.className = "vf-currency-value";
+    const arrow = document.createElement("span");
+    arrow.className = "vf-currency-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+    arrow.textContent = "▼";
+    trigger.append(value, arrow);
+
+    const menu = document.createElement("div");
+    menu.id = menuId;
+    menu.className = "vf-currency-menu";
+    menu.setAttribute("role", "listbox");
+    menu.setAttribute("aria-label", tooltip);
+    menu.hidden = true;
+
+    const closeMenu = ({ focusTrigger = false, suppressTooltip = false } = {}) => {
+      menu.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      control.dataset.vfCurrencyOpen = "false";
+      if (suppressTooltip) {
+        currencyTooltipSuppressedUntil = Date.now() + 1200;
+        control.dataset.vfTooltipSuppressed = "true";
+      }
+      if (focusTrigger) {
+        trigger.focus();
+      }
+    };
+
+    const sync = () => {
+      value.textContent = select.selectedOptions[0]?.textContent.trim() || select.value;
+      menu.querySelectorAll(".vf-currency-option").forEach((option) => {
+        const selected = option.dataset.value === select.value;
+        option.setAttribute("aria-selected", selected ? "true" : "false");
+      });
+    };
+
+    Array.from(select.options).forEach((nativeOption) => {
+      const option = document.createElement("button");
+      option.type = "button";
+      option.className = "vf-currency-option";
+      option.dataset.value = nativeOption.value;
+      option.setAttribute("role", "option");
+      option.textContent = nativeOption.textContent.trim();
+      option.addEventListener("click", () => {
+        select.value = nativeOption.value;
+        sync();
+        closeMenu({ focusTrigger: true, suppressTooltip: true });
+        select.dispatchEvent(new Event("input", { bubbles: true }));
+        select.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+      menu.append(option);
+    });
+
+    const openMenu = () => {
+      menu.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      control.dataset.vfCurrencyOpen = "true";
+    };
+
+    trigger.addEventListener("click", () => {
+      if (menu.hidden) {
+        openMenu();
+      } else {
+        closeMenu();
+      }
+    });
+
+    trigger.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") {
+        return;
+      }
+
+      event.preventDefault();
+      openMenu();
+      const options = Array.from(menu.querySelectorAll(".vf-currency-option"));
+      const selectedIndex = options.findIndex(
+        (option) => option.getAttribute("aria-selected") === "true"
+      );
+      const fallbackIndex = event.key === "ArrowDown" ? 0 : options.length - 1;
+      options[selectedIndex >= 0 ? selectedIndex : fallbackIndex]?.focus();
+    });
+
+    control.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !menu.hidden) {
+        event.preventDefault();
+        closeMenu({ focusTrigger: true });
+      }
+    });
+
+    control.addEventListener("focusout", (event) => {
+      if (!control.contains(event.relatedTarget)) {
+        closeMenu();
+      }
+    });
+
+    select.addEventListener("change", sync);
+    control.append(trigger, menu);
+    sync();
+
+    return true;
   }
 
   function getRemainingAvailabilityType(item) {
@@ -1123,6 +1301,7 @@
     const runEnhancements = () => [
       removeRemainingAvailabilityUnit,
       enhanceDiscountSavings,
+      enhanceCurrencySelector,
       enhancePassengerFields,
       enhanceTextareaFields,
       enhanceCollapsibleSections,

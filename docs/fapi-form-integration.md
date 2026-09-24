@@ -1,4 +1,14 @@
 
+## Local development — quick start
+
+Run from the repository root:
+
+```bash
+python3 -m http.server 8000
+```
+
+Open [http://localhost:8000/index-local.html](http://localhost:8000/index-local.html).
+
 ## Planned customization files
 
 - `fapi-custom.css`
@@ -150,9 +160,7 @@ python3 -m http.server 8000
 
 Then open:
 
-```text
-http://localhost:8000/index-local.html
-```
+[http://localhost:8000/index-local.html](http://localhost:8000/index-local.html)
 
 ## Section spacing and FAPI credit
 
