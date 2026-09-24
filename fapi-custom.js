@@ -111,13 +111,33 @@
       return true;
     }
 
-    const tooltip = "Vyber si měnu objednávky";
-    select.setAttribute("aria-label", tooltip);
-
     const control = select.closest(".fapi-form-basic-block-title-after");
     if (!control) {
       return true;
     }
+
+    const hasAlternativeCurrency = select.options.length > 1;
+    control.classList.toggle("vf-single-currency", !hasAlternativeCurrency);
+
+    if (!hasAlternativeCurrency) {
+      control.querySelector(".vf-currency-trigger")?.remove();
+      control.querySelector(".vf-currency-menu")?.remove();
+      delete control.dataset.vfCurrencyOpen;
+      delete control.dataset.vfTooltip;
+      delete control.dataset.vfTooltipSuppressed;
+
+      if (select.classList.contains("vf-native-currency-select")) {
+        select.classList.remove("vf-native-currency-select");
+        select.removeAttribute("aria-hidden");
+        select.removeAttribute("aria-label");
+        select.removeAttribute("tabindex");
+      }
+
+      return true;
+    }
+
+    const tooltip = "Vyber si měnu objednávky";
+    select.setAttribute("aria-label", tooltip);
 
     control.dataset.vfTooltip = tooltip;
     const tooltipSuppressionRemaining = currencyTooltipSuppressedUntil - Date.now();

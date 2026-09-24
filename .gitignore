@@ -12,3 +12,4 @@ package-lock.json
 *.md
 *.mjs
 !tests/availability.mjs
+!tests/currency.mjs

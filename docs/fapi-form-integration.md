@@ -52,6 +52,10 @@ Loading the custom JavaScript before the closing `body` tag ensures the wrapper
 already exists. The script's mutation observer then waits for FAPI's asynchronous
 form rendering before adding collapsible sections and passenger-field blocks.
 
+The currency control is shown only when FAPI provides at least two currency
+options. For a single configured currency, its empty header slot, arrow, and
+tooltip are hidden.
+
 ## Plain HTML integration
 
 On a normal HTML page, the following combined block can still be copied to the

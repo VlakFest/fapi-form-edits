@@ -500,6 +500,12 @@
   transform: translateX(-20px);
 }
 
+/* FAPI still renders the currency slot when the form has only one currency. */
+#fapi-form-wrapper .fapi-form-items .fapi-form-basic-block-title-after.vf-single-currency,
+#fapi-form-wrapper .fapi-form-items .fapi-form-basic-block-title-after:has(select):not(:has(select option:nth-child(2))) {
+  display: none !important;
+}
+
 #fapi-form-wrapper .fapi-form-items .fapi-form-basic-block-title-after::after {
   content: "\25BC";
   position: absolute;
