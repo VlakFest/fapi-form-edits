@@ -1,0 +1,35 @@
+/* Keep the original floating price square hidden while its currency control is moved by fapi-currency.js. */
+#fapi-form-wrapper .vf-currency-switcher {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 0 12px;
+  color: var(--vf-brown-dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#fapi-form-wrapper .vf-currency-switcher > * {
+  width: auto;
+  max-width: 100%;
+}
+
+#fapi-form-wrapper .vf-currency-switcher :is(select, button, [role="button"]) {
+  width: auto;
+  min-width: 0;
+  min-height: 36px;
+  padding: 6px 10px;
+  font: inherit;
+}
+
+@media (max-width: 480px) {
+  #fapi-form-wrapper .vf-currency-switcher {
+    justify-content: stretch;
+  }
+
+  #fapi-form-wrapper .vf-currency-switcher > * {
+    max-width: 100%;
+  }
+}
