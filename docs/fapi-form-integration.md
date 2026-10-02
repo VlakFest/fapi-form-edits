@@ -73,6 +73,13 @@ desired location inside `<body>`:
 
 The stylesheet centers the FAPI form within the wrapper while preserving FAPI's configured maximum width. The outer form shell is transparent, without a border, shadow, or padding, so it does not create a colored frame on the host page. This also applies on mobile screens.
 
+## Sold-out product rows
+
+FAPI marks sold-out products with a struck-through product name. CSS uses that
+state to give the entire row a subtle gray background. The existing `vyprodáno`
+message is shown as bold uppercase text; the source wording and form behavior
+stay under FAPI control.
+
 ## Remaining availability
 
 The script groups related product rows into shared client-side capacity pools. The

@@ -909,6 +909,19 @@
   text-align: right;
 }
 
+/* FAPI strikes through the product name when the item is sold out. */
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(> div:first-child label .f-line-through) {
+  background: #f4f4f2;
+}
+
+#fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(> div:first-child label .f-line-through) > div:nth-child(2) .f-text-sm.f-text-red-600 {
+  color: var(--vf-brown) !important;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
 /* Center the remaining count below the numeric quantity input. */
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row > div:nth-child(2) > div:first-child .vf-remaining-availability {
   width: max-content;
