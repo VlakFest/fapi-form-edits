@@ -911,7 +911,7 @@
 
 /* FAPI strikes through the product name when the item is sold out. */
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(> div:first-child label .f-line-through) {
-  background: #f4f4f2;
+  background: #e9e9e6;
 }
 
 #fapi-form-wrapper .fapi-form-items .fapi-form-item.product-row:has(> div:first-child label .f-line-through) > div:nth-child(2) .f-text-sm.f-text-red-600 {
