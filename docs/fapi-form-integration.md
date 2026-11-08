@@ -56,6 +56,21 @@ The currency control is shown only when FAPI provides at least two currency
 options. When FAPI renders no currency selector or only one currency, its empty
 header slot, arrow, and tooltip are hidden.
 
+The items header shows a centered, regular-weight italic 14px hint below its title,
+matching the consent text size, while keeping the currency switch on the right. With CZK selected it reads
+`Pro ceny a platbu v eurech přepni měnu →`; with EUR selected it reads
+`Pro ceny a platbu v korunách přepni měnu →`. The hint updates immediately after
+switching currencies and appears only when the target currency is selectable.
+
+The header uses the actual form container width for its responsive layout.
+Above 480px, the title and hint stay together beside the currency switch, with
+flexible side space instead of a fixed empty column. At 480px and below, the
+hint spans its own centered row beneath the title and switch. Currency phrases
+and the switching action stay together when wrapping.
+The arrow points right beside the switch and becomes an L-shaped upward
+arrow in the same container query that moves the hint below the switch.
+Both arrows use the same 16px SVG and 1.5-unit stroke for consistent emphasis.
+
 ## Plain HTML integration
 
 On a normal HTML page, the following combined block can still be copied to the
@@ -96,6 +111,8 @@ Whole compartments consume the corresponding number of individual places:
 The number displayed for a whole compartment is
 `floor(remaining individual places / compartment size)`. Open-plan couchettes
 (`plackart`) have no whole-compartment row and use a separate pool.
+Products whose names contain `lokálka` (case-insensitive) use another separate
+individual-place pool, with the same remaining-count and quantity behavior.
 
 Every quantity input receives a dynamic maximum based on the other selections
 in its pool. The plus control is blocked at that maximum. If a manually entered
@@ -115,6 +132,7 @@ capacity to increase that row's maximum above the value shown in the message.
 The editable `remainingAvailabilityLimits` object near the top of `fapi-custom.js`
 controls when the recalculated availability message is shown:
 
+- `localTrain: 30` — products whose names contain `lokálka`, regardless of letter case
 - `couchette: 42` — individual couchettes, including the student variant
 - `openPlanCouchette: 42` — individual couchettes in an open-plan coach (`plackart`), including the student variant
 - `bed: 24` — individual beds

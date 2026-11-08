@@ -28,9 +28,11 @@
   const validationSectionSelector = `${collapsibleSectionSelector}, .fapi-form-result, .fapi-form-result-container`;
   const remainingAvailabilitySelector = ".fapi-form-items .fapi-form-item *";
   const currencyObserverWrappers = new WeakSet();
+  const currencySelectorUpdates = new WeakMap();
   let currencyTooltipSuppressedUntil = 0;
   // Show remaining availability only at or below these editable limits.
   const remainingAvailabilityLimits = {
+    localTrain: 30, // Produkt obsahující „lokálka“, bez ohledu na velikost písmen.
     couchette: 42, // Lehátko v kupé pro 6, včetně studentské varianty.
     openPlanCouchette: 42, // Lehátko v plackartu, včetně studentské varianty.
     bed: 24, // Lůžko v kupé pro 3.
@@ -40,6 +42,11 @@
     fourBedCompartment: 8, // Celé lůžkové kupé pro 4.
   };
   const sharedCapacityRules = {
+    localTrain: {
+      individualType: "localTrain",
+      compartmentType: null,
+      compartmentSize: null,
+    },
     couchette: {
       individualType: "couchette",
       compartmentType: "couchetteCompartment",
@@ -78,6 +85,58 @@
       .toLowerCase();
   }
 
+  function enhanceCurrencyHint(header, select) {
+    if (!header) {
+      return;
+    }
+
+    const availableOptions = select && !select.matches(":disabled")
+      ? Array.from(select.options).filter(
+        (option) => !option.matches(":disabled") && !option.closest("[hidden]")
+      )
+      : [];
+    const targetCurrency = select?.value === "CZK" ? "EUR"
+      : select?.value === "EUR" ? "CZK" : null;
+    const hasTargetCurrency = availableOptions.length > 1 && availableOptions.some(
+      (option) => option.value === targetCurrency
+    );
+    let hint = header.querySelector(":scope > .vf-currency-hint");
+
+    if (!hasTargetCurrency) {
+      hint?.remove();
+      return;
+    }
+
+    if (!hint) {
+      hint = document.createElement("p");
+      hint.className = "vf-currency-hint";
+      header.append(hint);
+    }
+
+    const currencyText = targetCurrency === "EUR" ? "v eurech" : "v korunách";
+    const text = `Pro ceny a platbu ${currencyText} přepni měnu →`;
+    if (hint.textContent !== text) {
+      const currencyPhrase = document.createElement("span");
+      currencyPhrase.className = "vf-currency-hint-phrase";
+      currencyPhrase.textContent = currencyText;
+      const action = document.createElement("span");
+      action.className = "vf-currency-hint-phrase";
+      action.textContent = "přepni měnu ";
+      const arrow = document.createElement("span");
+      arrow.className = "vf-currency-hint-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "→";
+      arrow.insertAdjacentHTML("beforeend",
+        '<svg viewBox="0 0 20 20" focusable="false" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path class="vf-currency-hint-arrow-straight" d="M2 10h16m-4-4 4 4-4 4"/>' +
+        '<path class="vf-currency-hint-arrow-corner" d="M2 15h13V3m-4 4 4-4 4 4"/>' +
+        '</svg>'
+      );
+      action.append(arrow);
+      hint.replaceChildren("Pro ceny a platbu ", currencyPhrase, " ", action);
+    }
+  }
+
   function enhanceCurrencySelector() {
     const wrapper = document.querySelector(wrapperSelector);
 
@@ -99,19 +158,26 @@
         });
       });
 
-      observer.observe(wrapper, { childList: true, subtree: true });
+      observer.observe(wrapper, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ["disabled", "hidden", "value"],
+      });
       currencyObserverWrappers.add(wrapper);
     }
 
-    const control = wrapper.querySelector(
-      ".fapi-form-items .fapi-form-item-group > .fapi-container-header > .fapi-form-basic-block-title-after"
+    const header = wrapper.querySelector(
+      ".fapi-form-items .fapi-form-item-group > .fapi-container-header"
     );
+    const control = header?.querySelector(":scope > .fapi-form-basic-block-title-after");
+    const select = control?.querySelector("select");
+    enhanceCurrencyHint(header, select);
 
     if (!control) {
       return true;
     }
 
-    const select = control.querySelector("select");
     const hasAlternativeCurrency = Boolean(select && select.options.length > 1);
     control.classList.toggle("vf-single-currency", !hasAlternativeCurrency);
 
@@ -148,10 +214,7 @@
 
     const currentTrigger = control.querySelector(".vf-currency-trigger");
     if (currentTrigger) {
-      const value = currentTrigger.querySelector(".vf-currency-value");
-      if (value) {
-        value.textContent = select.selectedOptions[0]?.textContent.trim() || select.value;
-      }
+      currencySelectorUpdates.get(currentTrigger)?.();
       return true;
     }
 
@@ -196,30 +259,47 @@
       }
     };
 
+    let optionsSignature;
     const sync = () => {
-      value.textContent = select.selectedOptions[0]?.textContent.trim() || select.value;
+      enhanceCurrencyHint(header, select);
+      const selectedLabel = select.selectedOptions[0]?.textContent.trim() || select.value;
+      if (value.textContent !== selectedLabel) {
+        value.textContent = selectedLabel;
+      }
+      const nativeOptions = Array.from(select.options);
+      const signature = JSON.stringify(nativeOptions.map((option) => [
+        option.value, option.textContent.trim(), option.matches(":disabled"),
+        Boolean(option.closest("[hidden]")),
+      ]));
+
+      if (signature !== optionsSignature) {
+        optionsSignature = signature;
+        menu.replaceChildren();
+        nativeOptions.forEach((nativeOption) => {
+          const option = document.createElement("button");
+          option.type = "button";
+          option.className = "vf-currency-option";
+          option.dataset.value = nativeOption.value;
+          option.setAttribute("role", "option");
+          option.textContent = nativeOption.textContent.trim();
+          option.disabled = nativeOption.matches(":disabled");
+          option.hidden = Boolean(nativeOption.closest("[hidden]"));
+          option.addEventListener("click", () => {
+            select.value = nativeOption.value;
+            sync();
+            closeMenu({ focusTrigger: true, suppressTooltip: true });
+            select.dispatchEvent(new Event("input", { bubbles: true }));
+            select.dispatchEvent(new Event("change", { bubbles: true }));
+          });
+          menu.append(option);
+        });
+      }
       menu.querySelectorAll(".vf-currency-option").forEach((option) => {
         const selected = option.dataset.value === select.value;
         option.setAttribute("aria-selected", selected ? "true" : "false");
       });
     };
-
-    Array.from(select.options).forEach((nativeOption) => {
-      const option = document.createElement("button");
-      option.type = "button";
-      option.className = "vf-currency-option";
-      option.dataset.value = nativeOption.value;
-      option.setAttribute("role", "option");
-      option.textContent = nativeOption.textContent.trim();
-      option.addEventListener("click", () => {
-        select.value = nativeOption.value;
-        sync();
-        closeMenu({ focusTrigger: true, suppressTooltip: true });
-        select.dispatchEvent(new Event("input", { bubbles: true }));
-        select.dispatchEvent(new Event("change", { bubbles: true }));
-      });
-      menu.append(option);
-    });
+    currencySelectorUpdates.set(trigger, sync);
 
     const openMenu = () => {
       menu.hidden = false;
@@ -272,6 +352,10 @@
 
   function getRemainingAvailabilityType(item) {
     const productName = normalizeSearchText(item.querySelector("label")?.textContent || "");
+
+    if (productName.includes("lokalka")) {
+      return "localTrain";
+    }
 
     if (/\bcele\b.*\blehatkove\b.*\bkupe\b/u.test(productName)) {
       return "couchetteCompartment";

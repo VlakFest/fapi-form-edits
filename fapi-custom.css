@@ -712,6 +712,10 @@
   outline: 0;
 }
 
+#fapi-form-wrapper .fapi-form-items .vf-currency-option[hidden] {
+  display: none !important;
+}
+
 #fapi-form-wrapper .fapi-form-items .vf-currency-option[aria-selected="true"] {
   color: var(--vf-special);
   background: var(--vf-special-soft);
@@ -1506,6 +1510,95 @@
     justify-self: center;
     margin-right: 0;
     transform: none;
+  }
+}
+
+/* Let the title and hint use their natural width, with room for the switch. */
+#fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) {
+  grid-template-columns: minmax(0, 1fr) fit-content(100%) minmax(96px, 1fr);
+  grid-template-rows: auto auto;
+  gap: 2px 8px;
+  padding: 6px 24px !important;
+}
+
+#fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) > .fapi-form-basic-block-title {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) > .fapi-form-basic-block-title-after {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  justify-self: end;
+  align-self: center;
+  transform: none;
+}
+
+#fapi-form-wrapper .fapi-form-items .vf-currency-hint {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  margin: 0;
+  color: var(--vf-brown);
+  font-size: 14px;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  line-height: 1.45 !important;
+  text-align: center;
+  text-wrap: balance;
+}
+
+#fapi-form-wrapper .fapi-form-items .vf-currency-hint-phrase {
+  display: inline-block;
+  white-space: nowrap;
+  font-style: inherit !important;
+}
+
+#fapi-form-wrapper .fapi-form-items .vf-currency-hint-arrow {
+  font-size: 0 !important;
+  font-style: normal !important;
+}
+
+#fapi-form-wrapper .fapi-form-items .vf-currency-hint-arrow > svg {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: -2px;
+}
+
+#fapi-form-wrapper .fapi-form-items .vf-currency-hint-arrow-corner {
+  display: none;
+}
+
+/* Below this width, the hint gets a full row beneath the title and switch. */
+@container vf-items (max-width: 480px) {
+  #fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 4px 8px;
+    padding: 6px 8px !important;
+  }
+
+  #fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) > .fapi-form-basic-block-title {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  #fapi-form-wrapper .fapi-form-items .vf-currency-hint {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  #fapi-form-wrapper .fapi-form-items .fapi-form-item-group > .fapi-container-header:has(> .vf-currency-hint) > .fapi-form-basic-block-title-after {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  #fapi-form-wrapper .fapi-form-items .vf-currency-hint-arrow-straight {
+    display: none;
+  }
+
+  #fapi-form-wrapper .fapi-form-items .vf-currency-hint-arrow-corner {
+    display: inline;
   }
 }
 
